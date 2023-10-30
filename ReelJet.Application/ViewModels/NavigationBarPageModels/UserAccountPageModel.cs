@@ -14,6 +14,7 @@ using ReelJet.Database.Entities.Concretes;
 using ReelJet.Application.Models.DatabaseNamespace;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
+
 namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
     public class UserAccountPageModel : INotifyPropertyChanged {

@@ -28,6 +28,9 @@ public class UserAuthentication : IAuthLoginService, IAuthLogOutService, IAuthSi
     // Functions
 
     public bool LogIn(User user) {
+
+        if (Users == null) return false;
+
         if (CheckUserExist(user.Email!, user.Password!)) return true;
         return false;
     }

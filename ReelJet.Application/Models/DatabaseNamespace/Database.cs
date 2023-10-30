@@ -28,6 +28,7 @@ public static class Database {
     // Functions
 
     public static bool CheckUserExist(string email, string password) {
+
         foreach (var user in Users) {
             if (user.Email == email && user.Password == password) {
                 CurrentUser = user;

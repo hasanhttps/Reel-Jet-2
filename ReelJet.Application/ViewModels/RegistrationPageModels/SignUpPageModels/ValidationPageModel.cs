@@ -12,13 +12,12 @@ using System.Runtime.CompilerServices;
 using Reel_Jet.Models.DatabaseNamespace;
 using ReelJet.Database.Entities.Concretes;
 using Reel_Jet.Views.RegistrationPages.SignUpPages;
-using static Reel_Jet.Services.WebServices.SmtpService;
 using ReelJet.Application.Models.DatabaseNamespace;
+using static Reel_Jet.Services.WebServices.SmtpService;
 
 namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
 
     public class ValidationPageModel : INotifyPropertyChanged {
-
 
         // Private Fields
 
@@ -118,7 +117,6 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
                 }
                 else
                     MessageBox.Show("Fill all the required fields", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                MainFrame.Content = new MovieListPage(MainFrame);
             }
         }
 

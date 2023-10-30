@@ -1,13 +1,12 @@
-﻿using System;
-using System.Windows;
-using Reel_Jet.Commands;
+﻿using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.Windows.Controls;
 using Reel_Jet.Views.MoviePages;
 using ReelJet.Database.Entities;
 using System.Collections.ObjectModel;
-using Reel_Jet.Models.DatabaseNamespace;
 using Reel_Jet.Views.NavigationBarPages;
+using ReelJet.Database.Entities.Concretes;
+using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
 namespace Reel_Jet.ViewModels.NavigationBarPageModels {
     public class WatchListPageModel {
@@ -18,7 +17,7 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
         // Binding Properties
 
-        //public ObservableCollection<Movie> MyWatchList { get; set; } = Database.CurrentUser.MyWatchList;
+        public ObservableCollection<Movie> MyWatchList { get; set; } = new ObservableCollection<Movie>();
         public Reel_Jet.Models.MovieNamespace.ShortMovieInfo? MovieInfo { get; set; }
         public ICommand WatchMovieFromWatchListCommand { get; set; }
         public ICommand RemoveFromWatchListCommand { get; set; }
@@ -30,7 +29,14 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
         // Constructor
 
         public WatchListPageModel(Frame frame) {
+            
             MainFrame = frame;
+
+            if (CurrentUser.WatchList != null) {
+                foreach (var movie in CurrentUser.WatchList) {
+                    MyWatchList.Add(movie.Movie);
+                }
+            }
 
             WatchMovieFromWatchListCommand = new RelayCommand(WatchMovieFromWatchList);
             RemoveFromWatchListCommand = new RelayCommand(RemoveFromWatchList);
@@ -58,14 +64,21 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
         }
 
         private void WatchMovieFromWatchList(object? sender) {
-            Movie movie = (sender as Movie)!;
-            MainFrame.Content = new VideoPlayerPage(MainFrame, movie);
+
+            var Movie = (sender as ReelJet.Database.Entities.Movie)!;
+            MainFrame.Content = new VideoPlayerPage(MainFrame, Movie);
         }
 
         private void RemoveFromWatchList(object? sender) {
             Movie a = (sender as Movie)!;
-            //MyWatchList.Remove(a);
-            //JsonHandling.WriteData(Database.Users, "users");
+            MyWatchList.Remove(a);
+            UserWatchList? deleteditem = null;
+
+            foreach (var item in DbContext.WatchLists) {
+                if (item.UserId == CurrentUser.Id && item.MovieId == a.Id) deleteditem = item;
+            }
+            DbContext.WatchLists.Remove(deleteditem);
+            DbContext.SaveChanges();
         }
     }
 }

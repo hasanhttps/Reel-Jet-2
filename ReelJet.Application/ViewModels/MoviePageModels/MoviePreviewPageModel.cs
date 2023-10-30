@@ -106,6 +106,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                 Type = Movie.Type,
                 Title = Movie.Title
             };
+
             MainFrame.Content = new VideoPlayerPage(MainFrame, MovieAdapter);
 
             if (CurrentUser.HistoryList != null)
@@ -164,6 +165,8 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                 DbContext.SaveChanges();
             }
         }
+
+        // INotifyPropertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

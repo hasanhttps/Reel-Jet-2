@@ -1,5 +1,4 @@
-﻿using RestSharp;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.ComponentModel;
@@ -11,8 +10,7 @@ using Reel_Jet.Models.MovieNamespace;
 using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
 using ReelJet.Application.Models.DatabaseNamespace;
-using static Reel_Jet.Services.WebServices.OmdbService;
-
+using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
 namespace Reel_Jet.ViewModels.MoviePageModels {
     public class MoviewListPageModel : INotifyPropertyChanged {
@@ -75,16 +73,68 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
         }
 
         private void AddToWatchList(object? sender) {
-            Movie movie = (sender as Movie)!;
 
-            //foreach (var item in Database.CurrentUser.WatchList) {
-            //    if (item.imdbID == movie!.imdbID) {
-            //        MessageBox.Show("This Movie is already on your WatchList", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            //        return;
-            //    }
-            //}
-            //Database.CurrentUser.MyWatchList.Add(movie);
-            //JsonHandling.WriteData(Database.Users, "users");
+            Movie Movie = (sender as Movie)!;
+            bool isContain = false;
+
+            ReelJet.Database.Entities.Movie MovieEntity = new() {
+                Actors = Movie.Actors,
+                Awards = Movie.Awards,
+                BoxOffice = Movie.BoxOffice,
+                Country = Movie.Country,
+                Director = Movie.Director,
+                DVD = Movie.DVD,
+                Genre = Movie.Genre,
+                imdbID = Movie.imdbID,
+                imdbVotes = Movie.imdbVotes,
+                imdbRating = Movie.imdbRating,
+                Language = Movie.Language,
+                LikeCount = 0,
+                ViewCount = 1,
+                Metascore = Movie.Metascore,
+                Plot = Movie.Plot,
+                Poster = Movie.Poster,
+                Production = Movie.Production,
+                Rated = Movie.Rated,
+                Released = Movie.Released,
+                Response = Movie.Response,
+                Runtime = Movie.Runtime,
+                Year = Movie.Year,
+                Writer = Movie.Writer,
+                Website = Movie.Website,
+                Type = Movie.Type,
+                Title = Movie.Title,
+                
+            };
+
+            if (CurrentUser.WatchList != null)
+                foreach (var movie in CurrentUser.WatchList) {
+                    if (movie.Movie.Title == MovieEntity.Title && movie.Movie.imdbID == MovieEntity.imdbID)
+                        isContain = true;
+                }
+
+            if (!isContain) {
+
+                DbContext.Movies.Add(MovieEntity);
+                DbContext.SaveChanges();
+
+                ReelJet.Database.Entities.Concretes.UserWatchList WatchList = new() {
+                    UserId = CurrentUser.Id,
+                    MovieId = MovieEntity.Id,
+                };
+
+                foreach (var rating in Movie.Ratings)
+                    DbContext.Ratings.Add(new()
+                    {
+                        Source = rating.Source,
+                        Value = rating.Value,
+                        MovieId = MovieEntity.Id
+                    });
+
+                DbContext.WatchLists.Add(WatchList);
+
+                DbContext.SaveChanges();
+            }
         }
 
         private async void TaskToJson(string title) {
