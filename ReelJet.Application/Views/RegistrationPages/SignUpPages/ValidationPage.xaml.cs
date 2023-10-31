@@ -9,10 +9,10 @@ using Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels;
 namespace Reel_Jet.Views.RegistrationPages.SignUpPages {
     public partial class ValidationPage : Page {
         private Frame MainFrame;
-        public ValidationPage(Frame frame, User newUser) {
+        public ValidationPage(Frame frame, User newUser, string process) {
             InitializeComponent();
             MainFrame = frame;
-            DataContext = new ValidationPageModel(MainFrame, newUser);
+            DataContext = new ValidationPageModel(MainFrame, newUser, process);
         }
     }
 }

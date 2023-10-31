@@ -6,6 +6,8 @@
       xmlns:ut="clr-namespace:Reel_Jet.Utilities"
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:database="clr-namespace:ReelJet.Application.Models.DatabaseNamespace"
       xmlns:local="clr-namespace:Reel_Jet.Views.MoviePages.VideoPlayerPages"
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920" Background="#1F1F2B"
@@ -37,41 +39,73 @@
                 <ut:SearchBox PlaceHolder="Search" Height="40" Width="500"/>
             </Grid>
 
-            <StackPanel Grid.Row="1">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Frame x:Name="PlayerFrame" Height="600" Width="1200"/>
-                    <Button VerticalAlignment="Bottom" Margin="15 0" Background="#1F1F2B" BorderBrush="#12121A" Command="{Binding FullScreenButtonCommand}">
-                        <Button.Content>
-                            <Image Source="{StaticResource MinimizePlayerImg}"/>
-                        </Button.Content>
-                    </Button>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                        <Frame x:Name="PlayerFrame" Height="600" Width="1200"/>
+                        <Button VerticalAlignment="Bottom" Margin="15 0" Background="#1F1F2B" BorderBrush="#12121A" Command="{Binding FullScreenButtonCommand}">
+                            <Button.Content>
+                                <Image Source="{StaticResource MinimizePlayerImg}"/>
+                            </Button.Content>
+                        </Button>
+
+                    </StackPanel>
+
+                    <ListView ItemsSource="{Binding Options}" Width="1200" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Height="40" Width="150" CornerRadius="20" Background="#12121A" BorderBrush="Gray">
+                                    <TextBlock Text="{Binding option}" FontSize="15" Foreground="White" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" 
+                                   CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                    </ListView>
+
+                    <StackPanel Orientation="Horizontal" Margin="290,20,0,30">
+                        <TextBlock Text="{Binding Comments.Count}" FontSize="20" FontWeight="Medium" Foreground="White"/>
+                        <TextBlock Text=" Comment" FontSize="20" FontWeight="Medium" Foreground="White"/>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="290,0,0,0">
+                        <Border Height="50" Width="50" CornerRadius="150">
+                            <Border.Background>
+                                <ImageBrush ImageSource="{Binding Avatar, Source={x:Static database:Database.userAuthentication}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"/>
+                            </Border.Background>
+                        </Border>
+                        <ut:BindableTextBox x:Name="CommentTxtBox" Width="1100" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" Margin="30 0 0 10" BorderBrush="White" Height="60" Foreground="#6B6B77" PlaceHolder="Add Comment" Text="{Binding NewComment, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="1000,0,0,0">
+                        <Button Margin="250,30,0,0" Content="Cancel" Height="40" Width="80"></Button>
+                        <Button Command="{Binding SendCommentCommand}" CommandParameter="{Binding ElementName=CommentTxtBox}" Margin="50,30,0,0" Content="Send" Height="40" Width="80"></Button>
+                    </StackPanel>
+
+                    <ListView ItemsSource="{Binding Comments}" Margin="290,0,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" materialDesign:ListBoxItemAssist.ShowSelection="False">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Content}" Foreground="White" Margin="10"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
                 </StackPanel>
-                <ListView ItemsSource="{Binding Options}" Width="1200" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Border Height="40" Width="150" CornerRadius="20" Background="#12121A" BorderBrush="Gray">
-                                <TextBlock Text="{Binding option}" FontSize="15" Foreground="White" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" 
-                                   CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-
-                </ListView>
-            </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Page>

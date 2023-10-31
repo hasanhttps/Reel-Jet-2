@@ -62,7 +62,7 @@
                     </StackPanel>
 
                     <StackPanel VerticalAlignment="Bottom" Margin="0 0 0 49">
-                        <Button Content="Clear Cache Data" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" HorizontalContentAlignment="Left" FontSize="20" Foreground="White" Background="Transparent" BorderBrush="Transparent" Height="50" Margin="0 20 0 0" Command="{Binding AccountPgButtonCommand}">
+                        <Button Content="Clear Cache Data" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" HorizontalContentAlignment="Left" FontSize="20" Foreground="White" Background="Transparent" BorderBrush="Transparent" Height="50" Margin="0 20 0 0" Command="{Binding ClearCacheDataButtonCommand}">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="20"/>

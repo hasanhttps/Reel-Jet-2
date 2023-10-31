@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Windows;
 using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.Windows.Controls;
 using Reel_Jet.Views.MoviePages;
 using Reel_Jet.Views.NavigationBarPages;
 using Reel_Jet.Views.NavigationBarPages.SettingsPages;
-
 
 namespace Reel_Jet.ViewModels.NavigationBarPageModels {
     public class SettingsPageModel {
@@ -57,7 +58,22 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
         }
 
         private void ClearCacheData(object? sender) {
+            string folderPath = Environment.CurrentDirectory + "\\ReelJet.Application.exe.WebView2\\EBWebView";
+            MessageBox.Show(folderPath);
 
+            // Check if the directory exists before attempting to delete
+            if (Directory.Exists(folderPath)) {
+                try {
+                    Directory.Delete(folderPath, true); // Set the second parameter to true for recursive deletion
+                    MessageBox.Show("Folder and its contents deleted successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex) {
+                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else {
+                MessageBox.Show("The directory does not exist.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void ProfilePage(object? sender) {

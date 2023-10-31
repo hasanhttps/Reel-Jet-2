@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 
-namespace Reel_Jet.Models.DatabaseNamespace;
+namespace ReelJet.Application.Models.DatabaseNamespace;
 
 public static class JsonHandling {
 

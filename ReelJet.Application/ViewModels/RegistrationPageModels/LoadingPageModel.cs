@@ -7,17 +7,20 @@ using Castle.Core.Internal;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using ReelJet.Database.Contexts;
+using Reel_Jet.Views.MoviePages;
 using Reel_Jet.Models.MovieNamespace;
 using Reel_Jet.Views.RegistrationPages;
+using ReelJet.Application.Models.DatabaseNamespace;
 using static Reel_Jet.Services.WebServices.OmdbService;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
-
+using static ReelJet.Application.Models.DatabaseNamespace.JsonHandling;
 
 namespace Reel_Jet.ViewModels.RegistrationPageModels {
     public class LoadingPageModel {
 
         // Private Fields
 
+        private int? UserId;
         private Frame MainFrame;
 
         // Constructor
@@ -26,15 +29,29 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
 
             MainFrame = frame;
 
-            Thread thread = new Thread(() => {
+            Thread loadDatabase = new Thread(() => {
                 DbContext = new ReelJetDbContext();
                 var users = DbContext.Users.ToList();
                 Users = users;
             });
-            thread.Start();
+            loadDatabase.Start();
 
-            Thread thread2 = new Thread(Popular);
-            thread2.Start();
+            Thread fileMemoryThread = new Thread(() => {
+                try {
+                    UserId = ReadData<int?>("logs");
+
+                    loadDatabase.Join();
+                    CurrentUser = DbContext.Users.Where(u => u.Id == UserId).First();
+                    userAuthentication.Avatar = UserAuthentication.LoadImage(CurrentUser.Avatar!);
+                }
+                catch(Exception ex) {
+                    UserId = null;
+                }
+            });
+            fileMemoryThread.Start();
+
+            Thread popularMoviesThread = new Thread(Popular);
+            popularMoviesThread.Start();
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(6.25);
@@ -48,7 +65,9 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
             // Stop the timer
             
             ((DispatcherTimer)sender!).Stop();
-            MainFrame.Content = new LoginPage(MainFrame);
+            if (UserId != null) 
+                MainFrame.Content = new MovieListPage(MainFrame);
+            else MainFrame.Content = new LoginPage(MainFrame);
         }
 
         private async void Popular() {
@@ -69,6 +88,5 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
                 if (!movie.Title.IsNullOrEmpty()) Movies.Add(movie);
             }
         }
-
     }
 }

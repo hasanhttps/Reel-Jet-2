@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using HtmlAgilityPack;
 using Reel_Jet.Commands;
@@ -11,7 +12,9 @@ using Microsoft.Web.WebView2.Wpf;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
+using ReelJet.Database.Entities.Concretes;
 using Reel_Jet.Views.MoviePages.VideoPlayerPages;
+using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
 #nullable disable
 
@@ -23,13 +26,23 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
         private Movie Movie;
         private WebView2 Player;
         private Frame MainFrame;
-        private string _videoPgUrl;
         private string _videoUrl;
+        private string newcomment;
+        private string _videoPgUrl;
 
         // Binding Properties
 
+        public ObservableCollection<Comment> Comments { get; set; }
 
-        public Frame PlayerFrame;
+        public string NewComment { get => newcomment;
+            set {
+                newcomment = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Frame PlayerFrame { get; set; }
+        public RelayCommand SendCommentCommand { get; set; }
         public ICommand WatchListPgButtonCommand { get; set; }
         public ICommand FullScreenButtonCommand { get; set; }
         public ICommand SelectionChangedCommand { get; set; }
@@ -56,12 +69,15 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
             HistoryPgButtonCommand = new RelayCommand(HistoryPage);
             MovieListPageCommand = new RelayCommand(MovieListPage);
             ProfilePgButtonCommand = new RelayCommand(ProfilePage);
+            SendCommentCommand= new RelayCommand(SendComment);
 
+            Comments = new();
         }
 
         public MinimizeScreenPageModel(Frame frame, Movie movie, WebView2 player, 
             Frame playerframe, ObservableCollection<Reel_Jet.Models.MovieNamespace.Option> options, string videoUrl, string videoPgLink)
             : this() {
+
             MainFrame = frame;
             Movie = movie;
             Player = player;
@@ -72,6 +88,9 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
 
             Uri uri = new Uri(VideoUrl!);
             Player.Source = uri;
+
+            WriteComments();
+            
         }
 
 
@@ -157,7 +176,36 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
                 throw new Exception("Trailer Link");
         }
 
+        private void SendComment(object? param) {
+            if (!string.IsNullOrEmpty(NewComment)) {
+                Comment comment = new Comment { Content = NewComment, PostedTime = DateTime.Now, LikeCount = 0 };
 
+                Comments.Add(comment);
+                DbContext.Comments.Add(comment);
+                DbContext.SaveChanges();
+
+                CommentsMovies commentsMovies = new CommentsMovies() { CommentId = comment.Id, MovieId = Movie.Id };
+                DbContext.CommentsMovies.Add(commentsMovies);
+                DbContext.SaveChanges();
+
+                NewComment = string.Empty;
+
+            }
+        }
+
+        private void WriteComments() {
+
+            if (Movie != null) {
+                var commentMovie = DbContext.CommentsMovies
+                    .Where(p => p.MovieId == Movie.Id)
+                    .Select(p => p.Comment)
+                    .ToList();
+                
+                foreach(var comment in commentMovie) {
+                    Comments.Add(comment);
+                }
+            }
+        }
         // INotifyPropertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -165,5 +213,6 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
         public void OnPropertyChanged([CallerMemberName] string? propertyName = null) { 
             PropertyChanged!.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

@@ -105,11 +105,16 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
             fileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png, *.gif, *.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All files (*.*)|*.*";
 
             if (fileDialog.ShowDialog() == true) {
-                using (FileStream fs = new FileStream(fileDialog.FileName, FileMode.Open, FileAccess.Read)) {
-                    using (BinaryReader br = new BinaryReader(fs)) {
-                        EditedUser.Avatar = br.ReadBytes((int)fs.Length);
-                        Avatar = UserAuthentication.LoadImage(EditedUser.Avatar!);
+                try {
+                    using (FileStream fs = new FileStream(fileDialog.FileName, FileMode.Open, FileAccess.Read)) {
+                        using (BinaryReader br = new BinaryReader(fs)) {
+                            EditedUser.Avatar = br.ReadBytes((int)fs.Length);
+                            Avatar = UserAuthentication.LoadImage(EditedUser.Avatar!);
+                        }
                     }
+                }
+                catch(Exception ex) {
+                    MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
         }

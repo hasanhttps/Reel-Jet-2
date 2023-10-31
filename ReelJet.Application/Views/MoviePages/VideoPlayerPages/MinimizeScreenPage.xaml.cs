@@ -15,6 +15,7 @@ namespace Reel_Jet.Views.MoviePages.VideoPlayerPages {
 
             DataContext = new MinimizeScreenPageModel(frame, movie, (fullScreenPage.DataContext as FullScreenPageModel)!.getPlayer(), 
                 PlayerFrame, options, videoUrl, videoPgUrl);
+
         }
     }
 }

@@ -45,10 +45,12 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
             Movie = movie;
 
             SearchAlgorithm(movie.Title);
-            if (!CheckMovieExist())
-                MessageBox.Show("Movie video don't exist!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!CheckMovieExist()) {
 
-            VideoPlayerFrame.Content = new MinimizeScreenPage(frame, movie, Options, VideoUrl, _videoPgUrl);
+                videoplayerframe.Content = MainFrame.Content;
+                MessageBox.Show("Movie video don't exist!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else VideoPlayerFrame.Content = new MinimizeScreenPage(frame, movie, Options, VideoUrl, _videoPgUrl);
         }
 
         // Functions

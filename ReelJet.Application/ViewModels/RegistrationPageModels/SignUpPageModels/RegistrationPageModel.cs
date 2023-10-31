@@ -4,9 +4,7 @@ using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.ComponentModel;
 using System.Windows.Controls;
-using Reel_Jet.Services.WebServices;
 using System.Runtime.CompilerServices;
-using Reel_Jet.Models.DatabaseNamespace;
 using ReelJet.Database.Entities.Concretes;
 using Reel_Jet.Views.RegistrationPages.SignUpPages;
 using ReelJet.Application.Models.DatabaseNamespace;
@@ -51,7 +49,7 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
                 !string.IsNullOrEmpty(ConfirmPassword)) {
 
                 if (ConfirmPassword == newUser.Password) 
-                    RegistrationFrame.Content = new ValidationPage(MainFrame,newUser);
+                    RegistrationFrame.Content = new ValidationPage(MainFrame, newUser, "Registration");
                 else
                     MessageBox.Show("Wrong Password Confirmation,Try Again", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }

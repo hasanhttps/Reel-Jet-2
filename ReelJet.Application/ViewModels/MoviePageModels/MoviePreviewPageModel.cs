@@ -78,42 +78,17 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
             
             bool isContain = false;
 
-            ReelJet.Database.Entities.Movie MovieAdapter = new() {
-                Actors = Movie.Actors,
-                Awards = Movie.Awards,
-                BoxOffice = Movie.BoxOffice,
-                Country = Movie.Country,
-                Director = Movie.Director,
-                DVD = Movie.DVD,
-                Genre = Movie.Genre,
-                imdbID = Movie.imdbID,
-                imdbVotes = Movie.imdbVotes,
-                imdbRating = Movie.imdbRating,
-                Language = Movie.Language,
-                LikeCount = 0,
-                ViewCount = 1,
-                Metascore = Movie.Metascore,
-                Plot = Movie.Plot,
-                Poster = Movie.Poster,
-                Production = Movie.Production,
-                Rated = Movie.Rated,
-                Released = Movie.Released,
-                Response = Movie.Response,
-                Runtime = Movie.Runtime,
-                Year = Movie.Year,
-                Writer = Movie.Writer,
-                Website = Movie.Website,
-                Type = Movie.Type,
-                Title = Movie.Title
-            };
-
-            MainFrame.Content = new VideoPlayerPage(MainFrame, MovieAdapter);
+            ReelJet.Database.Entities.Movie MovieAdapter = new();
 
             if (CurrentUser.HistoryList != null)
                 foreach(var movie in CurrentUser.HistoryList) {
-                    if (movie.Movie.Title == Movie.Title && movie.Movie.imdbID == Movie.imdbID)
+                    if (movie.Movie.Title == Movie.Title && movie.Movie.imdbID == Movie.imdbID) {
+
+                        MovieAdapter = movie.Movie;
                         isContain = true;
+                    }
                 }
+
 
             if (!isContain) {
 
@@ -163,7 +138,11 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                 DbContext.HistoryLists.Add(historyList);
 
                 DbContext.SaveChanges();
+
+                MovieAdapter = movie;
             }
+
+            MainFrame.Content = new VideoPlayerPage(MainFrame, MovieAdapter);
         }
 
         // INotifyPropertyChanged

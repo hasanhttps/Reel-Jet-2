@@ -45,7 +45,6 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
             videoPlayerFrame.NavigationService.Navigate(minimizeScreen);
 
             minimizeScreen.PlayerFrame.Content = new FullScreenPage(MainFrame, Movie, VideoUrl);
-            
         }
 
         public WebView2 getPlayer() {
