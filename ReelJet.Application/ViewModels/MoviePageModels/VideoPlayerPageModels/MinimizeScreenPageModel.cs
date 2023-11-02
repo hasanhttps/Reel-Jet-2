@@ -178,7 +178,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
 
         private void SendComment(object? param) {
             if (!string.IsNullOrEmpty(NewComment)) {
-                Comment comment = new Comment { Content = NewComment, PostedTime = DateTime.Now, LikeCount = 0 };
+                Comment comment = new Comment { Content = NewComment, PostedTime = DateTime.Now, LikeCount = 0, UserId = CurrentUser.Id };
 
                 Comments.Add(comment);
                 DbContext.Comments.Add(comment);
@@ -196,12 +196,13 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
         private void WriteComments() {
 
             if (Movie != null) {
-                var commentMovie = DbContext.CommentsMovies
+
+                var comments = DbContext.CommentsMovies
                     .Where(p => p.MovieId == Movie.Id)
                     .Select(p => p.Comment)
                     .ToList();
-                
-                foreach(var comment in commentMovie) {
+
+                foreach (var comment in comments) {
                     Comments.Add(comment);
                 }
             }

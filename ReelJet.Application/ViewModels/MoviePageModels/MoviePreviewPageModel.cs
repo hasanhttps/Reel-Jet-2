@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using Reel_Jet.Commands;
 using System.Windows.Input;
@@ -9,7 +10,6 @@ using Reel_Jet.Models.MovieNamespace;
 using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
-
 
 namespace Reel_Jet.ViewModels.MoviePageModels {
     public class MoviePreviewPageModel : INotifyPropertyChanged {
@@ -73,15 +73,15 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
         private void ProfilePage(object? sender) {
             MainFrame.Content = new UserAccountPage(MainFrame);
         }
-        
+
         private void VideoPlayerPage(object? param) {
-            
+
             bool isContain = false;
 
             ReelJet.Database.Entities.Movie MovieAdapter = new();
 
             if (CurrentUser.HistoryList != null)
-                foreach(var movie in CurrentUser.HistoryList) {
+                foreach (var movie in CurrentUser.HistoryList) {
                     if (movie.Movie.Title == Movie.Title && movie.Movie.imdbID == Movie.imdbID) {
 
                         MovieAdapter = movie.Movie;
@@ -89,6 +89,26 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                     }
                 }
 
+            if (DbContext.Movies != null) {
+                var movies = DbContext.CommentsMovies.ToList();
+                if (movies != null) {
+                    foreach (var movie in movies) {
+                        if (movie.Movie.Title == Movie.Title && movie.Movie.imdbID == Movie.imdbID) {
+
+                            ReelJet.Database.Entities.Concretes.UserHistoryList historyList = new() {
+                                UserId = CurrentUser.Id,
+                                MovieId = movie.Id,
+                            };
+
+                            DbContext.HistoryLists.Add(historyList);
+                            DbContext.SaveChanges();
+
+                            MovieAdapter = movie.Movie;
+                            isContain = true;
+                        }
+                    }
+                }
+            }
 
             if (!isContain) {
 

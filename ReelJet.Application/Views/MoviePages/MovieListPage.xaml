@@ -1,7 +1,8 @@
 ﻿<Page x:Class="Reel_Jet.Views.MoviePages.MovieListPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ma="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ut="clr-namespace:Reel_Jet.Utilities"
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -32,11 +33,35 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
+
                 <ut:SearchBox x:Name="SearchFilm" PlaceHolder="Search" Height="40" Width="500">
                     <ut:SearchBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SearchFilm, Path=content}"/>
                     </ut:SearchBox.InputBindings>
                 </ut:SearchBox>
+
+                <ComboBox 
+                    Width="170" FontSize="12" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"
+                    Foreground="White" HorizontalAlignment="Right" Margin="0 0 30 10"
+                    
+                    ma:HintAssist.Hint="Filter Movies" 
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding FilterSelectionChangedCommand}" 
+                            CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBox}}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+
+                    <ComboBoxItem Content="Popular" Foreground="Black"></ComboBoxItem>
+                    <ComboBoxItem Content="Now Playing" Foreground="Black"></ComboBoxItem>
+                    <ComboBoxItem Content="Upcoming" Foreground="Black"></ComboBoxItem>
+                    <ComboBoxItem Content="Top Rated" Foreground="Black"></ComboBoxItem>
+                </ComboBox>
+
             </Grid>
 
             <Grid Grid.Row="1">

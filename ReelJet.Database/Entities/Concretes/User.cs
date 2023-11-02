@@ -11,6 +11,7 @@ public class User : Person {
 
     // Navigation Properties
 
+    public virtual ICollection<Comment> Comments { get; set; }
     public virtual ICollection<UserWatchList> WatchList { get; set; }
     public virtual ICollection<UserHistoryList> HistoryList { get; set; }
     public virtual ICollection<UserPersonalMovieWatchList> PersonalMovieWatchList { get; set; }

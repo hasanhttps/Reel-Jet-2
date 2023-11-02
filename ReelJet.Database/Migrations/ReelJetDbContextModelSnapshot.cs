@@ -74,7 +74,12 @@ namespace ReelJet.Database.Migrations
                     b.Property<DateTime>("PostedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -182,7 +187,7 @@ namespace ReelJet.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Age")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("Avatar")
@@ -421,6 +426,17 @@ namespace ReelJet.Database.Migrations
                     b.ToTable("Movies");
                 });
 
+            modelBuilder.Entity("ReelJet.Database.Entities.Concretes.Comment", b =>
+                {
+                    b.HasOne("ReelJet.Database.Entities.Concretes.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ReelJet.Database.Entities.Concretes.CommentsMovies", b =>
                 {
                     b.HasOne("ReelJet.Database.Entities.Concretes.Comment", "Comment")
@@ -564,6 +580,8 @@ namespace ReelJet.Database.Migrations
 
             modelBuilder.Entity("ReelJet.Database.Entities.Concretes.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("HistoryList");
 
                     b.Navigation("PersonalMovieHistoryList");
