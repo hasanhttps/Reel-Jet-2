@@ -5,6 +5,6 @@ using ReelJet.Database.Entities.Concretes;
 
 namespace Reel_Jet.Services.InterfaceServices {
     public interface IAuthLogOutService {
-        void LogOut(User user);
+        void LogOut();
     }
 }

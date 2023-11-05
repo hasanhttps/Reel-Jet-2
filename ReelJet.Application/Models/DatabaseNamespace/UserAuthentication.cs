@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.IO.Pipes;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 using System.Runtime.CompilerServices;
@@ -61,8 +62,17 @@ public class UserAuthentication : IAuthLoginService, IAuthLogOutService, IAuthSi
         }
     }
 
-    public void LogOut(User user) {
-        // database-dan silme
+    public void LogOut() {
+        try {
+            using FileStream f = new("logs.json", FileMode.Truncate);
+            f.SetLength(0);
+            MessageBox.Show("You have logged out successfully","Log Out",MessageBoxButton.OK,MessageBoxImage.Information);
+
+        }
+        catch (Exception ex) {
+            throw ex;
+        }
+
     }
 
     public static BitmapImage LoadImage(byte[] imageData) {

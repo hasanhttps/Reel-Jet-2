@@ -15,6 +15,10 @@ public static class Database {
     public static User CurrentUser { get; set; }
     public static List<User> Users { get; set; }
     public static ReelJetDbContext DbContext { get; set; }
+    public static ObservableCollection<Movie> PopularMovies { get; set; } = new();
+    public static ObservableCollection<Movie> TopRatedMovies { get; set; } = new();
+    public static ObservableCollection<Movie> UpcomingMovies { get; set; } = new();
+    public static ObservableCollection<Movie> NowPlayingMovies { get; set; } = new();
     public static ObservableCollection<Movie> Movies { get; set; } = new();
     public static UserAuthentication userAuthentication { get; set; } = new();
     public static Dictionary<string, TextBlock> ErrorLabels { get; set; } = new();

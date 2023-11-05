@@ -1,4 +1,7 @@
-﻿using Reel_Jet.Commands;
+﻿using System;
+using System.Linq;
+using System.Windows;
+using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.Windows.Controls;
 using Reel_Jet.Views.MoviePages;
@@ -7,6 +10,7 @@ using System.Collections.ObjectModel;
 using Reel_Jet.Views.NavigationBarPages;
 using ReelJet.Database.Entities.Concretes;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
+
 
 namespace Reel_Jet.ViewModels.NavigationBarPageModels {
     public class WatchListPageModel {
@@ -59,24 +63,43 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
         private void ProfilePage(object? sender) {
             MainFrame.Content = new UserAccountPage(MainFrame);
         }
+
         private void SettingsPage(object? sender) {
             MainFrame.Content = new SettingsPage(MainFrame);
         }
 
         private void WatchMovieFromWatchList(object? sender) {
-
-            var Movie = (sender as ReelJet.Database.Entities.Movie)!;
-            MainFrame.Content = new VideoPlayerPage(MainFrame, Movie);
+ 
+            try {
+                var Movie = (sender as ReelJet.Database.Entities.Movie)!;
+                ReelJet.Database.Entities.Concretes.UserHistoryList historyList = new() {
+                    UserId = CurrentUser.Id,
+                    Movie = Movie,
+                    MovieId = Movie.Id,
+                    User = CurrentUser,
+                };
+ 
+                if(!DbContext.HistoryLists.Any(entity => entity.UserId == historyList.UserId && entity.Movie.imdbID==historyList.Movie.imdbID)) {
+                    DbContext.HistoryLists.Add(historyList);
+                    DbContext.SaveChanges();
+                }
+                
+                MainFrame.Content = new VideoPlayerPage(MainFrame, Movie);
+            }
+            catch(Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void RemoveFromWatchList(object? sender) {
-            Movie a = (sender as Movie)!;
+
+            ReelJet.Database.Entities.Movie a = (sender as ReelJet.Database.Entities.Movie)!;
             MyWatchList.Remove(a);
             UserWatchList? deleteditem = null;
 
-            foreach (var item in DbContext.WatchLists) {
+            foreach (var item in DbContext.WatchLists)
                 if (item.UserId == CurrentUser.Id && item.MovieId == a.Id) deleteditem = item;
-            }
+
             DbContext.WatchLists.Remove(deleteditem);
             DbContext.SaveChanges();
         }

@@ -15,7 +15,7 @@ public class UserPersonalMovieHistoryListConfiguration : IEntityTypeConfiguratio
 
         // Navigation Bars
 
-        builder.HasOne(p => p.User).WithMany(p => p.PersonalMovieHistoryList).HasForeignKey(p => p.UserId);
+        builder.HasOne(p => p.User).WithMany(p => p.PersonalMovieHistoryList).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.NoAction);
         builder.HasOne(p => p.PersonalMovie).WithMany(p => p.HistoryList).HasForeignKey(p => p.PersonalMovieId);
     }
 }

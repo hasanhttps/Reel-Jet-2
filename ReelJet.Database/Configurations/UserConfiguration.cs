@@ -23,6 +23,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User> {
 
         builder.HasMany(p => p.WatchList).WithOne(p => p.User).HasForeignKey(p => p.UserId);
         builder.HasMany(p => p.HistoryList).WithOne(p => p.User).HasForeignKey(p => p.UserId);
+        builder.HasMany(p => p.ForYouMovies).WithOne(p => p.User).HasForeignKey(p => p.UserId);
         builder.HasMany(p => p.PersonalMovieWatchList).WithOne(p => p.User).HasForeignKey(p => p.UserId);
         builder.HasMany(p => p.PersonalMovieHistoryList).WithOne(p => p.User).HasForeignKey(p => p.UserId);
     }

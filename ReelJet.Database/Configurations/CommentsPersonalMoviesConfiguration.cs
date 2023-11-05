@@ -16,6 +16,6 @@ public class CommentsPersonalMoviesConfiguration : IEntityTypeConfiguration<Comm
         // Relations
 
         builder.HasOne(p => p.Comment).WithMany(p => p.CommentsPersonalMovies).HasForeignKey(p => p.CommentId);
-        builder.HasOne(p => p.PersonalMovie).WithMany(p => p.CommentsMovies).HasForeignKey(p => p.PersonalMovieId);
+        builder.HasOne(p => p.PersonalMovie).WithMany(p => p.CommentsPersonalMovies).HasForeignKey(p => p.PersonalMovieId).OnDelete(DeleteBehavior.NoAction);
     }
 }

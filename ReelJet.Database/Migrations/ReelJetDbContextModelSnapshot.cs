@@ -138,17 +138,45 @@ namespace ReelJet.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Hour")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Minute")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MovieLink")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Poster")
+                        .IsRequired()
+                        .HasColumnType("image");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ViewCount")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("PersonalMovies");
                 });
@@ -465,14 +493,25 @@ namespace ReelJet.Database.Migrations
                         .IsRequired();
 
                     b.HasOne("ReelJet.Database.Entities.Concretes.PersonalMovie", "PersonalMovie")
-                        .WithMany("CommentsMovies")
+                        .WithMany("CommentsPersonalMovies")
                         .HasForeignKey("PersonalMovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Comment");
 
                     b.Navigation("PersonalMovie");
+                });
+
+            modelBuilder.Entity("ReelJet.Database.Entities.Concretes.PersonalMovie", b =>
+                {
+                    b.HasOne("ReelJet.Database.Entities.Concretes.User", "User")
+                        .WithMany("ForYouMovies")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ReelJet.Database.Entities.Concretes.Rating", b =>
@@ -516,7 +555,7 @@ namespace ReelJet.Database.Migrations
                     b.HasOne("ReelJet.Database.Entities.Concretes.User", "User")
                         .WithMany("PersonalMovieHistoryList")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("PersonalMovie");
@@ -535,7 +574,7 @@ namespace ReelJet.Database.Migrations
                     b.HasOne("ReelJet.Database.Entities.Concretes.User", "User")
                         .WithMany("PersonalMovieWatchList")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("PersonalMovie");
@@ -571,7 +610,7 @@ namespace ReelJet.Database.Migrations
 
             modelBuilder.Entity("ReelJet.Database.Entities.Concretes.PersonalMovie", b =>
                 {
-                    b.Navigation("CommentsMovies");
+                    b.Navigation("CommentsPersonalMovies");
 
                     b.Navigation("HistoryList");
 
@@ -581,6 +620,8 @@ namespace ReelJet.Database.Migrations
             modelBuilder.Entity("ReelJet.Database.Entities.Concretes.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("ForYouMovies");
 
                     b.Navigation("HistoryList");
 

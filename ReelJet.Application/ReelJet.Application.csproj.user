@@ -7,11 +7,23 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\MoviePages\ForYouPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\NavigationBarPages\SettingsPages\UploadVideoPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\RegistrationPages\ForgotPasswordPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\MoviePages\ForYouPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\NavigationBarPages\SettingsPages\UploadVideoPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\RegistrationPages\ForgotPasswordPage.xaml">
       <SubType>Designer</SubType>
     </Page>

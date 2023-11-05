@@ -5,8 +5,11 @@ using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.Windows.Controls;
 using Reel_Jet.Views.MoviePages;
+using Reel_Jet.Views.RegistrationPages;
 using Reel_Jet.Views.NavigationBarPages;
+using ReelJet.Application.Models.DatabaseNamespace;
 using Reel_Jet.Views.NavigationBarPages.SettingsPages;
+using ReelJet.Application.Views.NavigationBarPages.SettingsPages;
 
 namespace Reel_Jet.ViewModels.NavigationBarPageModels {
     public class SettingsPageModel {
@@ -18,25 +21,23 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
         // Binding Properties
 
+        public ICommand? UploadPersonalMoviePgButtonCommand { get; set; }
         public ICommand? ClearCacheDataButtonCommand { get; set; }
         public ICommand? WatchListPgButtonCommand { get; set; }
         public ICommand? HistoryPgButtonCommand { get; set; }
         public ICommand? ProfilePgButtonCommand { get; set; }
         public ICommand? AccountPgButtonCommand { get; set; }
         public ICommand? MovieListPageCommand { get; set; }
+        public ICommand? LogOutCommand { get; set; }
 
         // Constructor
 
         public SettingsPageModel(Frame frame, Frame settingsframe) { 
+
             MainFrame = frame;
             SettingsFrame = settingsframe;
 
-            ClearCacheDataButtonCommand = new RelayCommand(ClearCacheData);
-            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
-            MovieListPageCommand = new RelayCommand(MovieListPage);
-            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
-            AccountPgButtonCommand = new RelayCommand(AccountPage);
-            HistoryPgButtonCommand = new RelayCommand(HistoryPage);
+            SetCommands();    
         }
 
         // Functions
@@ -57,9 +58,34 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
             SettingsFrame.Content = new AccountPage();
         }
 
+        private void UploadVideoPage(object? sender) {
+            SettingsFrame.Content = new UploadVideoPage();
+        }
+
+
+        private void LogOut(object? sender) {
+            try {
+                Database.userAuthentication.LogOut();
+                MainFrame.Content = new LoginPage(MainFrame);
+            }
+            catch(Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SetCommands() {
+
+            LogOutCommand = new RelayCommand(LogOut);
+            MovieListPageCommand = new RelayCommand(MovieListPage);
+            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
+            AccountPgButtonCommand = new RelayCommand(AccountPage);
+            HistoryPgButtonCommand = new RelayCommand(HistoryPage);
+            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
+            ClearCacheDataButtonCommand = new RelayCommand(ClearCacheData);
+            UploadPersonalMoviePgButtonCommand = new RelayCommand(UploadVideoPage);
+        }
+
         private void ClearCacheData(object? sender) {
             string folderPath = Environment.CurrentDirectory + "\\ReelJet.Application.exe.WebView2\\EBWebView";
-            MessageBox.Show(folderPath);
 
             // Check if the directory exists before attempting to delete
             if (Directory.Exists(folderPath)) {

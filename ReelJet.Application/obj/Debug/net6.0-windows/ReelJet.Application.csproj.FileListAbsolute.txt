@@ -132,3 +132,7 @@ C:\Users\hasan\WPF Projects\Final Projects\ReelJet 2\ReelJet.Application\bin\Deb
 C:\Users\hasan\WPF Projects\Final Projects\ReelJet 2\ReelJet.Application\bin\Debug\net6.0-windows\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\hasan\WPF Projects\Final Projects\ReelJet 2\ReelJet.Application\obj\Debug\net6.0-windows\Views\RegistrationPages\ForgotPasswordPage.g.cs
 C:\Users\hasan\WPF Projects\Final Projects\ReelJet 2\ReelJet.Application\obj\Debug\net6.0-windows\Views\RegistrationPages\ForgotPasswordPage.baml
+C:\Users\hasan\WPF Projects\Final Projects\ReelJet 2\ReelJet.Application\obj\Debug\net6.0-windows\Views\MoviePages\ForYouPage.g.cs
+C:\Users\hasan\WPF Projects\Final Projects\ReelJet 2\ReelJet.Application\obj\Debug\net6.0-windows\Views\MoviePages\ForYouPage.baml
+C:\Users\hasan\WPF Projects\Final Projects\ReelJet 2\ReelJet.Application\obj\Debug\net6.0-windows\Views\NavigationBarPages\SettingsPages\UploadVideoPage.g.cs
+C:\Users\hasan\WPF Projects\Final Projects\ReelJet 2\ReelJet.Application\obj\Debug\net6.0-windows\Views\NavigationBarPages\SettingsPages\UploadVideoPage.baml

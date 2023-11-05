@@ -30,6 +30,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
             Player = player;
 
             MinimizeScreenButtonCommand = new RelayCommand(MinimizePage);
+
         }
 
         // Functions

@@ -90,7 +90,7 @@
                         </Border>
                         <ut:BindableTextBox x:Name="CommentTxtBox" Width="1100" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" Margin="30 0 0 10" BorderBrush="White" Height="60" Foreground="#6B6B77" PlaceHolder="Add Comment" Text="{Binding NewComment, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
                     </StackPanel>
-                    
+
                     <StackPanel Orientation="Horizontal" Margin="1000,0,0,0">
                         <Button Margin="250,30,0,0" Content="Cancel" Height="40" Width="80"></Button>
                         <Button Command="{Binding SendCommentCommand}" CommandParameter="{Binding ElementName=CommentTxtBox}" Margin="50,30,0,0" Content="Send" Height="40" Width="80"></Button>
@@ -99,11 +99,21 @@
                     <ListView ItemsSource="{Binding Comments}" Margin="290,0,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" materialDesign:ListBoxItemAssist.ShowSelection="False">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Content}" Foreground="White" Margin="10"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Height="50" Width="50" CornerRadius="150">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{Binding Avatar}" Stretch="UniformToFill"/>
+                                        </Border.Background>
+                                    </Border>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding User.Name}" Margin="10" Foreground="White" FontSize="15" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding Content}" Foreground="White" Margin="10,5,0,0"/>
+                                    </StackPanel>
+
+                                </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-
                 </StackPanel>
             </ScrollViewer>
         </Grid>

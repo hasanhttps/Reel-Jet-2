@@ -13,6 +13,7 @@ public class User : Person {
 
     public virtual ICollection<Comment> Comments { get; set; }
     public virtual ICollection<UserWatchList> WatchList { get; set; }
+    public virtual ICollection<PersonalMovie> ForYouMovies { get; set; }
     public virtual ICollection<UserHistoryList> HistoryList { get; set; }
     public virtual ICollection<UserPersonalMovieWatchList> PersonalMovieWatchList { get; set; }
     public virtual ICollection<UserPersonalMovieHistoryList> PersonalMovieHistoryList { get; set; }

@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
+
 namespace Reel_Jet.ViewModels.MoviePageModels {
     public class MoviePreviewPageModel : INotifyPropertyChanged {
 
@@ -74,44 +75,44 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
             MainFrame.Content = new UserAccountPage(MainFrame);
         }
 
-        private void VideoPlayerPage(object? param) {
-
+       private void VideoPlayerPage(object? param) {
+ 
             bool isContain = false;
-
+ 
             ReelJet.Database.Entities.Movie MovieAdapter = new();
-
+ 
             if (CurrentUser.HistoryList != null)
                 foreach (var movie in CurrentUser.HistoryList) {
                     if (movie.Movie.Title == Movie.Title && movie.Movie.imdbID == Movie.imdbID) {
-
+ 
                         MovieAdapter = movie.Movie;
                         isContain = true;
                     }
                 }
 
-            if (DbContext.Movies != null) {
+            else if (DbContext.Movies != null) {
                 var movies = DbContext.CommentsMovies.ToList();
                 if (movies != null) {
                     foreach (var movie in movies) {
                         if (movie.Movie.Title == Movie.Title && movie.Movie.imdbID == Movie.imdbID) {
-
+ 
                             ReelJet.Database.Entities.Concretes.UserHistoryList historyList = new() {
                                 UserId = CurrentUser.Id,
                                 MovieId = movie.Id,
                             };
-
+ 
                             DbContext.HistoryLists.Add(historyList);
                             DbContext.SaveChanges();
-
+ 
                             MovieAdapter = movie.Movie;
                             isContain = true;
                         }
                     }
                 }
             }
-
+ 
             if (!isContain) {
-
+ 
                 ReelJet.Database.Entities.Movie movie = new() {
                     Actors = Movie.Actors,
                     Awards = Movie.Awards,
@@ -142,26 +143,26 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                 };
                 DbContext.Movies.Add(movie);
                 DbContext.SaveChanges();
-
+ 
                 ReelJet.Database.Entities.Concretes.UserHistoryList historyList = new() {
                     UserId = CurrentUser.Id,
                     MovieId = movie.Id,
                 };
-
+ 
                 foreach (var rating in Movie.Ratings)
                     DbContext.Ratings.Add(new() {
                         Source = rating.Source,
                         Value = rating.Value,
                         MovieId = movie.Id
                     });
-
+ 
                 DbContext.HistoryLists.Add(historyList);
-
+ 
                 DbContext.SaveChanges();
-
+ 
                 MovieAdapter = movie;
             }
-
+ 
             MainFrame.Content = new VideoPlayerPage(MainFrame, MovieAdapter);
         }
 

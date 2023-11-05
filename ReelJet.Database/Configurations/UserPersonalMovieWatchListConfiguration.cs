@@ -15,7 +15,7 @@ public class UserPersonalMovieWatchListConfiguration : IEntityTypeConfiguration<
 
         // Relations
 
-        builder.HasOne(l => l.User).WithMany(l => l.PersonalMovieWatchList).HasForeignKey(l => l.UserId);
+        builder.HasOne(l => l.User).WithMany(l => l.PersonalMovieWatchList).HasForeignKey(l => l.UserId).OnDelete(DeleteBehavior.NoAction);
         builder.HasOne(l => l.PersonalMovie).WithMany(l => l.WatchList).HasForeignKey(l => l.PersonalMovieId);
     }
 }

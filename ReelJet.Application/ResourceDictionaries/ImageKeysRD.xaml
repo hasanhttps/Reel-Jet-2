@@ -21,5 +21,9 @@
     <BitmapImage x:Key="EditImg" UriSource="\Static Files\Images\edit.png"/>
     <BitmapImage x:Key="SettingsAccountImg" UriSource="\Static Files\Images\account.png"/>
     <BitmapImage x:Key="MinimizePlayerImg" UriSource="\Static Files\Images\minimize.png"/>
+    <BitmapImage x:Key="ForYouPageImg" UriSource="\Static Files\Images\foryou.png"/>
+    <BitmapImage x:Key="LogOutImg" UriSource="\Static Files\Images\logout.png"/>
+    <BitmapImage x:Key="ClearCacheImg" UriSource="\Static Files\Images\clearcache.png"/>
+    <BitmapImage x:Key="UploadPersonalMovie" UriSource="\Static Files\Images\uploadvideo.png"/>
     
 </ResourceDictionary>

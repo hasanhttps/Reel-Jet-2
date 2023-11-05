@@ -47,8 +47,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
             SearchAlgorithm(movie.Title);
             if (!CheckMovieExist()) {
 
-                videoplayerframe.Content = MainFrame.Content;
-                MessageBox.Show("Movie video don't exist!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                VideoPlayerFrame.Content = new MinimizeScreenPage(frame, movie, Options, $"https://multiembed.mov/?video_id={Movie.imdbID}", _videoPgUrl);
             }
             else VideoPlayerFrame.Content = new MinimizeScreenPage(frame, movie, Options, VideoUrl, _videoPgUrl);
         }

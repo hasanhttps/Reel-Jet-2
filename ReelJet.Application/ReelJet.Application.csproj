@@ -16,13 +16,16 @@
     <None Remove="Static Files\Fonts\Sonny Gothic\SonnyGothic-UltraBlack.ttf" />
     <None Remove="Static Files\Images\account.png" />
     <None Remove="Static Files\Images\added.png" />
+    <None Remove="Static Files\Images\clearcache.png" />
     <None Remove="Static Files\Images\cog.png" />
     <None Remove="Static Files\Images\edit.png" />
+    <None Remove="Static Files\Images\foryou.png" />
     <None Remove="Static Files\Images\history.png" />
     <None Remove="Static Files\Images\imdb_top_250.jpg" />
     <None Remove="Static Files\Images\info.png" />
     <None Remove="Static Files\Images\LoadingImage.jpg" />
     <None Remove="Static Files\Images\lock.png" />
+    <None Remove="Static Files\Images\logout.png" />
     <None Remove="Static Files\Images\MaleUserProfile.png" />
     <None Remove="Static Files\Images\minimize.png" />
     <None Remove="Static Files\Images\movie %281%29.ico" />
@@ -34,6 +37,7 @@
     <None Remove="Static Files\Images\ReelJet Logo 1.png" />
     <None Remove="Static Files\Images\SignUp Logo.jpg" />
     <None Remove="Static Files\Images\star.png" />
+    <None Remove="Static Files\Images\uploadvideo.png" />
     <None Remove="Static Files\Images\WatchListIcon.png" />
     <None Remove="Static Files\Images\watchmovie.png" />
   </ItemGroup>
@@ -41,7 +45,6 @@
   <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="Services\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,13 +81,16 @@
     </Resource>
     <Resource Include="Static Files\Images\account.png" />
     <Resource Include="Static Files\Images\added.png" />
+    <Resource Include="Static Files\Images\clearcache.png" />
     <Resource Include="Static Files\Images\cog.png" />
     <Resource Include="Static Files\Images\edit.png" />
+    <Resource Include="Static Files\Images\foryou.png" />
     <Resource Include="Static Files\Images\history.png" />
     <Resource Include="Static Files\Images\imdb_top_250.jpg" />
     <Resource Include="Static Files\Images\info.png" />
     <Resource Include="Static Files\Images\LoadingImage.jpg" />
     <Resource Include="Static Files\Images\lock.png" />
+    <Resource Include="Static Files\Images\logout.png" />
     <Resource Include="Static Files\Images\MaleUserProfile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -98,6 +104,7 @@
     <Resource Include="Static Files\Images\ReelJet Logo 1.png" />
     <Resource Include="Static Files\Images\SignUp Logo.jpg" />
     <Resource Include="Static Files\Images\star.png" />
+    <Resource Include="Static Files\Images\uploadvideo.png" />
     <Resource Include="Static Files\Images\WatchListIcon.png" />
     <Resource Include="Static Files\Images\watchmovie.png" />
   </ItemGroup>

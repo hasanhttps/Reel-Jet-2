@@ -143,6 +143,23 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="Button" x:Key="NavigationForYouButton">
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Image Source="{StaticResource ForYouPageImg}" Height="25" Width="25"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="Button" x:Key="NavigationSettingsButton">
         
         <Setter Property="Template">

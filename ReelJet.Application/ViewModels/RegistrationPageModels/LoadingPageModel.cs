@@ -1,6 +1,7 @@
 ﻿using System;
 using RestSharp;
 using System.Linq;
+using System.Windows;
 using System.Threading;
 using System.Text.Json;
 using Castle.Core.Internal;
@@ -14,6 +15,7 @@ using ReelJet.Application.Models.DatabaseNamespace;
 using static Reel_Jet.Services.WebServices.OmdbService;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 using static ReelJet.Application.Models.DatabaseNamespace.JsonHandling;
+
 
 namespace Reel_Jet.ViewModels.RegistrationPageModels {
     public class LoadingPageModel {
@@ -50,8 +52,23 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
             });
             fileMemoryThread.Start();
 
-            Thread popularMoviesThread = new Thread(Popular);
-            popularMoviesThread.Start();
+            try {
+                Thread popularThread = new Thread(()=>LoadFilteredMoviesToDatabase("popular"));
+                popularThread.Start();
+
+                Thread topRatedThread = new Thread(() => LoadFilteredMoviesToDatabase("top_rated"));
+                topRatedThread.Start();
+
+                Thread upcomingThread = new Thread(() => LoadFilteredMoviesToDatabase("upcoming"));
+                upcomingThread.Start();
+
+                Thread nowPlayingThread = new Thread(() => LoadFilteredMoviesToDatabase("now_playing"));
+                nowPlayingThread.Start();
+            }
+            catch(Exception ex) {
+                MessageBox.Show(ex.Message, "Network Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(6.25);
@@ -70,23 +87,30 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
             else MainFrame.Content = new LoginPage(MainFrame);
         }
 
-        private async void Popular() {
 
-            var options = new RestClientOptions("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1");
+
+        public async void LoadFilteredMoviesToDatabase(string filterchoice) {
+
+            var options = new RestClientOptions($"https://api.themoviedb.org/3/movie/{filterchoice}?language=en-US&page=1");
             var client = new RestClient(options);
             var request = new RestRequest("");
             request.AddHeader("accept", "application/json");
             request.AddHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwN2I3OWYxNmU2NWFmMGY1YTBjNGY4ZGFkZDdkMDhjNCIsInN1YiI6IjY0YjA0MzFjMjBlY2FmMDBjNmY2MWQ1ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.VErhjbegJJ2tyZVP-GiDRN_gTcH_MYVhQ1wThi0Ytb0");
             var response = await client.GetAsync(request);
-            PopularMovies popularMovies = JsonSerializer.Deserialize<PopularMovies>(response.Content!)!;
+            FilteredMovies popularMovies = JsonSerializer.Deserialize<FilteredMovies>(response.Content!)!;
+            for (int i = 0; i < popularMovies.results.Count; i++) {
 
-            for(int i = 0; i < popularMovies.results.Count; i++)  {
                 var jsonStr = await GetConcreteMovieByTitle(popularMovies.results[i].title);
                 Movie movie = JsonSerializer.Deserialize<Movie>(jsonStr)!;
                 movie.Year = popularMovies.results[i].release_date.Substring(0, 4);
 
-                if (!movie.Title.IsNullOrEmpty()) Movies.Add(movie);
-            }
+                if (!movie.Title.IsNullOrEmpty()) {
+                    if (filterchoice == "popular") Database.PopularMovies.Add(movie);
+                    else if (filterchoice == "top_rated") Database.TopRatedMovies.Add(movie);
+                    else if (filterchoice == "upcoming") Database.UpcomingMovies.Add(movie);
+                    else if (filterchoice == "now_playing") Database.NowPlayingMovies.Add(movie);
+                } 
+            }   
         }
     }
 }
