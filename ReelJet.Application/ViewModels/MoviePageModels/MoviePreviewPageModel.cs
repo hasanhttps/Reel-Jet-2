@@ -9,6 +9,7 @@ using Reel_Jet.Views.MoviePages;
 using Reel_Jet.Models.MovieNamespace;
 using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
+using ReelJet.Application.Views.MoviePages;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
 
@@ -22,13 +23,14 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         // Binding Properties
 
-        public ICommand? WatchListPgButtonCommand { get; set; }
-        public ICommand? SettingsPgButtonCommand { get; set; }
-        public ICommand? HistoryPgButtonCommand { get; set; }
-        public ICommand? ProfilePgButtonCommand { get; set; }
-        public ICommand? VideoPlayerPageCommand { get; set; }
-        public ICommand? MovieListPageCommand { get; set; }
         public string trailerLink { get; set; }
+        public ICommand? ForYouPageCommand { get; set; }
+        public ICommand? MovieListPageCommand { get; set; }
+        public ICommand? VideoPlayerPageCommand { get; set; }
+        public ICommand? ProfilePgButtonCommand { get; set; }
+        public ICommand? HistoryPgButtonCommand { get; set; }
+        public ICommand? SettingsPgButtonCommand { get; set; }
+        public ICommand? WatchListPgButtonCommand { get; set; }
         public Movie Movie {
             get => _movie!;
             set {
@@ -73,6 +75,21 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         private void ProfilePage(object? sender) {
             MainFrame.Content = new UserAccountPage(MainFrame);
+        }
+
+        private void ForYouPage(object? sender) {
+            MainFrame.Content = new ForYouPage(MainFrame);
+        }
+
+        private void SetCommands() {
+
+            ForYouPageCommand = new RelayCommand(ForYouPage);
+            HistoryPgButtonCommand = new RelayCommand(HistoryPage);
+            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
+            MovieListPageCommand = new RelayCommand(MovieListPage);
+            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
+            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
+            VideoPlayerPageCommand = new RelayCommand(VideoPlayerPage);
         }
 
        private void VideoPlayerPage(object? param) {

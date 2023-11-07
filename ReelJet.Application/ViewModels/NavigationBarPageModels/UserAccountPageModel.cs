@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
 using ReelJet.Database.Entities.Concretes;
+using ReelJet.Application.Views.MoviePages;
 using ReelJet.Application.Models.DatabaseNamespace;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
@@ -31,35 +32,59 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
                 _avatar = value; OnProperty();
             } 
         }
+        public ICommand? EditPfpCommand { get; set; }
         public User EditedUser { get; set; } = new();
-        public ICommand WatchListPgButtonCommand { get; set; }
-        public ICommand SettingsPgButtonCommand { get; set; }
-        public ICommand ConfirmChangeCommand { get; set; }
-        public ICommand MoviePgButtonCommand { get; set; }
-        public ICommand HistoryPgCommand { get; set; }
-        public ICommand EditPfpCommand { get; set; }
-
+        public ICommand? HistoryPgCommand { get; set; }
+        public ICommand? ForYouPageCommand { get; set; }
+        public ICommand? ConfirmChangeCommand { get; set; }
+        public ICommand? MoviePgButtonCommand { get; set; }
+        public ICommand? SettingsPgButtonCommand { get; set; }
+        public ICommand? WatchListPgButtonCommand { get; set; }
 
         // Constructor
 
-
         public UserAccountPageModel(Frame frame) {
+
             MainFrame = frame;
 
             setUser();
-
-            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
-            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
-            MoviePgButtonCommand = new RelayCommand(MovieListPage);
-            ConfirmChangeCommand = new RelayCommand(ConfirmChange);
-            HistoryPgCommand = new RelayCommand(HistoryPage);
-            EditPfpCommand = new RelayCommand(EditPfp);
+            SetCommands();
 
             Avatar = userAuthentication.Avatar;
         }
 
         // Functions
 
+        private void MovieListPage(object? sender) {
+            MainFrame.Content = new MovieListPage(MainFrame);
+        }
+
+        private void HistoryPage(object? sender) {
+            MainFrame.Content = new HistoryPage(MainFrame);
+        }
+
+        private void WatchListPage(object? sender) {
+            MainFrame.Content = new WatchListPage(MainFrame);
+        }
+
+        private void SettingsPage(object? sender) {
+            MainFrame.Content = new SettingsPage(MainFrame);
+        }
+
+        private void ForYouPage(object? sender) {
+            MainFrame.Content = new ForYouPage(MainFrame);
+        }
+
+        private void SetCommands()  {
+
+            EditPfpCommand = new RelayCommand(EditPfp);
+            ForYouPageCommand = new RelayCommand(ForYouPage);
+            HistoryPgCommand = new RelayCommand(HistoryPage);
+            MoviePgButtonCommand = new RelayCommand(MovieListPage);
+            ConfirmChangeCommand = new RelayCommand(ConfirmChange);
+            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
+            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
+        }
 
         private void setUser() {
 
@@ -117,22 +142,6 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
                     MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
-        }
-
-        private void MovieListPage(object? sender) {
-            MainFrame.Content = new MovieListPage(MainFrame);
-        }
-
-        private void HistoryPage(object? sender) {
-            MainFrame.Content = new HistoryPage(MainFrame);
-        }
-
-        private void WatchListPage(object? sender) {
-            MainFrame.Content = new WatchListPage(MainFrame);
-        }
-
-        private void SettingsPage(object? sender) {
-            MainFrame.Content = new SettingsPage(MainFrame);
         }
 
         // INotifyPropertyChanged

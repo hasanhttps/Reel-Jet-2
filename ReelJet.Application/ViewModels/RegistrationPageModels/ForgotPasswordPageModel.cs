@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using ReelJet.Database.Entities.Concretes;
 using Reel_Jet.Views.RegistrationPages.SignUpPages;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
+using static ReelJet.Application.Models.DatabaseNamespace.JsonHandling;
 
 namespace ReelJet.Application.ViewModels.RegistrationPageModels;
 
@@ -13,12 +14,12 @@ public class ForgotPasswordPageModel {
     // Private Fields
 
     private Frame MainFrame;
-    private Frame RegistrationFrame;
 
     // Binding Properties
 
     public User CurrentUser { get; set; } = new();
     public RelayCommand RequestPasswordCommand { get; set; }
+    public RelayCommand LanguageSelectionChangedCommand { get; set; }
     
     // Constructor
 
@@ -27,9 +28,25 @@ public class ForgotPasswordPageModel {
         MainFrame = frame;
 
         RequestPasswordCommand = new RelayCommand(RequestPassword);
+        LanguageSelectionChangedCommand = new RelayCommand(LanguageSelectionChanged);
     }
 
     // Functions
+
+
+    private void LanguageSelectionChanged(object? param) {
+        string selectedlng = "";
+        if (param is ComboBoxItem cb)
+            if (cb.Content is StackPanel sp)
+                foreach (var item in sp.Children) {
+                    if (item is TextBlock tb)
+                        selectedlng = tb.Text;
+                }
+        if (selectedlng == "AZE")
+            CurrentLanguageControl.DeepCopy(ReadData<AzerbaijaniLanguageControl>("aze")!);
+        else if (selectedlng == "ENG")
+            CurrentLanguageControl.DeepCopy(ReadData<EnglishLanguageControl>("eng")!);
+    }
 
     public void RequestPassword(object? param) {
 

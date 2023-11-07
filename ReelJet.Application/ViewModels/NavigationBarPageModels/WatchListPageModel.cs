@@ -9,6 +9,7 @@ using ReelJet.Database.Entities;
 using System.Collections.ObjectModel;
 using Reel_Jet.Views.NavigationBarPages;
 using ReelJet.Database.Entities.Concretes;
+using ReelJet.Application.Views.MoviePages;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
 
@@ -21,33 +22,24 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
         // Binding Properties
 
-        public ObservableCollection<Movie> MyWatchList { get; set; } = new ObservableCollection<Movie>();
-        public Reel_Jet.Models.MovieNamespace.ShortMovieInfo? MovieInfo { get; set; }
-        public ICommand WatchMovieFromWatchListCommand { get; set; }
-        public ICommand RemoveFromWatchListCommand { get; set; }
-        public ICommand? MovieListPgButtonCommand { get; set; }
-        public ICommand? SettingsPgButtonCommand { get; set; }
-        public ICommand? HistoryPgButtonCommand { get; set; }
+        public ICommand? ForYouPageCommand { get; set; }
         public ICommand? ProfilePgButtonCommand { get; set; }
+        public ICommand? HistoryPgButtonCommand { get; set; }
+        public ICommand? SettingsPgButtonCommand { get; set; }
+        public ICommand? MovieListPgButtonCommand { get; set; }
+        public ICommand RemoveFromWatchListCommand { get; set; }
+        public ICommand WatchMovieFromWatchListCommand { get; set; }
+        public Reel_Jet.Models.MovieNamespace.ShortMovieInfo? MovieInfo { get; set; }
+        public ObservableCollection<Movie> MyWatchList { get; set; } = new ObservableCollection<Movie>();
 
         // Constructor
 
         public WatchListPageModel(Frame frame) {
-            
+
             MainFrame = frame;
 
-            if (CurrentUser.WatchList != null) {
-                foreach (var movie in CurrentUser.WatchList) {
-                    MyWatchList.Add(movie.Movie);
-                }
-            }
-
-            WatchMovieFromWatchListCommand = new RelayCommand(WatchMovieFromWatchList);
-            RemoveFromWatchListCommand = new RelayCommand(RemoveFromWatchList);
-            MovieListPgButtonCommand = new RelayCommand(MovieListPage);
-            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
-            HistoryPgButtonCommand = new RelayCommand(HistoryPage);
-            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
+            WriteWatchlist();
+            SetCommands();
         }
 
         // Functions
@@ -66,6 +58,30 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
         private void SettingsPage(object? sender) {
             MainFrame.Content = new SettingsPage(MainFrame);
+        }
+
+        private void ForYouPage(object? sender) {
+            MainFrame.Content = new ForYouPage(MainFrame);
+        }
+
+        private void WriteWatchlist() {
+
+            if (CurrentUser.WatchList != null) {
+                foreach (var movie in CurrentUser.WatchList) {
+                    MyWatchList.Add(movie.Movie);
+                }
+            }
+        }
+
+        private void SetCommands() {
+
+            ForYouPageCommand = new RelayCommand(ForYouPage);
+            HistoryPgButtonCommand = new RelayCommand(HistoryPage);
+            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
+            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
+            MovieListPgButtonCommand = new RelayCommand(MovieListPage);
+            RemoveFromWatchListCommand = new RelayCommand(RemoveFromWatchList);
+            WatchMovieFromWatchListCommand = new RelayCommand(WatchMovieFromWatchList);
         }
 
         private void WatchMovieFromWatchList(object? sender) {

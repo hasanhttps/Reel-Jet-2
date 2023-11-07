@@ -25,5 +25,7 @@
     <BitmapImage x:Key="LogOutImg" UriSource="\Static Files\Images\logout.png"/>
     <BitmapImage x:Key="ClearCacheImg" UriSource="\Static Files\Images\clearcache.png"/>
     <BitmapImage x:Key="UploadPersonalMovie" UriSource="\Static Files\Images\uploadvideo.png"/>
+    <BitmapImage x:Key="AzeFlagImg" UriSource="\Static Files\Images\azeflag.png"/>
+    <BitmapImage x:Key="UKFlagImg" UriSource="\Static Files\Images\ukflag.png"/>
     
 </ResourceDictionary>

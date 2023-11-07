@@ -16,6 +16,7 @@
     <None Remove="Static Files\Fonts\Sonny Gothic\SonnyGothic-UltraBlack.ttf" />
     <None Remove="Static Files\Images\account.png" />
     <None Remove="Static Files\Images\added.png" />
+    <None Remove="Static Files\Images\azeflag.png" />
     <None Remove="Static Files\Images\clearcache.png" />
     <None Remove="Static Files\Images\cog.png" />
     <None Remove="Static Files\Images\edit.png" />
@@ -37,6 +38,7 @@
     <None Remove="Static Files\Images\ReelJet Logo 1.png" />
     <None Remove="Static Files\Images\SignUp Logo.jpg" />
     <None Remove="Static Files\Images\star.png" />
+    <None Remove="Static Files\Images\ukflag.png" />
     <None Remove="Static Files\Images\uploadvideo.png" />
     <None Remove="Static Files\Images\WatchListIcon.png" />
     <None Remove="Static Files\Images\watchmovie.png" />
@@ -81,6 +83,7 @@
     </Resource>
     <Resource Include="Static Files\Images\account.png" />
     <Resource Include="Static Files\Images\added.png" />
+    <Resource Include="Static Files\Images\azeflag.png" />
     <Resource Include="Static Files\Images\clearcache.png" />
     <Resource Include="Static Files\Images\cog.png" />
     <Resource Include="Static Files\Images\edit.png" />
@@ -104,6 +107,7 @@
     <Resource Include="Static Files\Images\ReelJet Logo 1.png" />
     <Resource Include="Static Files\Images\SignUp Logo.jpg" />
     <Resource Include="Static Files\Images\star.png" />
+    <Resource Include="Static Files\Images\ukflag.png" />
     <Resource Include="Static Files\Images\uploadvideo.png" />
     <Resource Include="Static Files\Images\WatchListIcon.png" />
     <Resource Include="Static Files\Images\watchmovie.png" />

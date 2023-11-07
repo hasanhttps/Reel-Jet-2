@@ -24,6 +24,7 @@
             <Button Margin="0 60 0 0" VerticalAlignment="Top" Style="{StaticResource NavigationWatchListButton}" Command="{Binding WatchListPgButtonCommand}"/>
             <Button Margin="0 110 0 0" VerticalAlignment="Top" Style="{StaticResource NavigationHistoryButton}" Command="{Binding HistoryPgButtonCommand}"/>
             <Button Margin="0 160 0 0" VerticalAlignment="Top" Style="{StaticResource NavigationMovieListButton}" Command="{Binding MovieListPageCommand}"/>
+            <Button Margin="0 210 0 0" VerticalAlignment="Top" Style="{StaticResource NavigationForYouButton}" Command="{Binding ForYouPageCommand}"/>
             <Button Margin="0 0 0 70" VerticalAlignment="Bottom" Style="{StaticResource NavigationSettingsButton}" Command="{Binding SettingsPgButtonCommand}"/>
             <Button Margin="0 0 0 20" VerticalAlignment="Bottom" Style="{StaticResource NavigationProfileButton}" Command="{Binding ProfilePgButtonCommand}"/>
 
@@ -34,14 +35,14 @@
                 <RowDefinition Height="140"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-
+            
             <Grid Grid.Row="0">
                 <ut:SearchBox PlaceHolder="Search" Height="40" Width="500"/>
             </Grid>
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="150 0 0 0">
 
                         <Frame x:Name="PlayerFrame" Height="600" Width="1200"/>
                         <Button VerticalAlignment="Bottom" Margin="15 0" Background="#1F1F2B" BorderBrush="#12121A" Command="{Binding FullScreenButtonCommand}">
@@ -50,9 +51,29 @@
                             </Button.Content>
                         </Button>
 
+                        <StackPanel Margin="10 100 0 0" Name="ServersSection">
+                            <TextBlock Text="Servers" Margin="0 0 0 30" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" FontSize="20" FontWeight="Medium" Foreground="White"/>
+
+                            <Button Width="300" Background="#12121A" BorderBrush="#12121A" Margin="0 10 0 0" Height="50" HorizontalContentAlignment="Left" Command="{Binding MultipleServerButtonCommand}" CommandParameter="Multiple Server 1">
+                                <TextBlock Text="   Multiple Server 1" FontSize="15" FontWeight="Medium" Foreground="White"/>
+                            </Button>
+
+                            <Button Width="300" Background="#12121A" BorderBrush="#12121A" Margin="0 10 0 0" Height="50" HorizontalContentAlignment="Left" Command="{Binding MultipleServerButtonCommand}" CommandParameter="Multiple Server 2">
+                                <TextBlock Text="   Multiple Server 2" FontSize="15" FontWeight="Medium" Foreground="White"/>
+                            </Button>
+
+                            <Button Width="300" Background="#12121A" BorderBrush="#12121A" Margin="0 10 0 0" Height="50" HorizontalContentAlignment="Left" Command="{Binding MultipleServerButtonCommand}" CommandParameter="Multiple Server 3">
+                                <TextBlock Text="   Multiple Server 3" FontSize="15" FontWeight="Medium" Foreground="White"/>
+                            </Button>
+
+                            <Button Width="300" Background="#12121A" BorderBrush="#12121A" Margin="0 10 0 0" Height="50" HorizontalContentAlignment="Left" Command="{Binding MultipleServerButtonCommand}" CommandParameter="Multiple Server 4">
+                                <TextBlock Text="   Multiple Server 4" FontSize="15" FontWeight="Medium" Foreground="White"/>
+                            </Button>
+                        </StackPanel>
+
                     </StackPanel>
 
-                    <ListView ItemsSource="{Binding Options}" Width="1200" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView ItemsSource="{Binding Options, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Margin="0 0 245 0" Width="1200" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -77,26 +98,26 @@
 
                     </ListView>
 
-                    <StackPanel Orientation="Horizontal" Margin="290,20,0,30">
+                    <StackPanel Orientation="Horizontal" Margin="205,20,0,30">
                         <TextBlock Text="{Binding Comments.Count}" FontSize="20" FontWeight="Medium" Foreground="White"/>
-                        <TextBlock Text=" Comment" FontSize="20" FontWeight="Medium" Foreground="White"/>
+                        <TextBlock Text="{Binding CommentText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontWeight="Medium" Foreground="White"/>
                     </StackPanel>
                     
-                    <StackPanel Orientation="Horizontal" Margin="290,0,0,0">
+                    <StackPanel Orientation="Horizontal" Margin="205,0,0,0">
                         <Border Height="50" Width="50" CornerRadius="150">
                             <Border.Background>
                                 <ImageBrush ImageSource="{Binding Avatar, Source={x:Static database:Database.userAuthentication}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"/>
                             </Border.Background>
                         </Border>
-                        <ut:BindableTextBox x:Name="CommentTxtBox" Width="1100" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" Margin="30 0 0 10" BorderBrush="White" Height="60" Foreground="#6B6B77" PlaceHolder="Add Comment" Text="{Binding NewComment, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
+                        <ut:BindableTextBox x:Name="CommentTxtBox" Width="1100" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" Margin="30 0 0 10" BorderBrush="White" Height="60" Foreground="#6B6B77" PlaceHolder="{Binding AddCommentText, Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Text="{Binding NewComment, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="1000,0,0,0">
-                        <Button Margin="250,30,0,0" Content="Cancel" Height="40" Width="80"></Button>
-                        <Button Command="{Binding SendCommentCommand}" CommandParameter="{Binding ElementName=CommentTxtBox}" Margin="50,30,0,0" Content="Send" Height="40" Width="80"></Button>
+                    <StackPanel Orientation="Horizontal" Margin="955,0,0,0">
+                        <Button Margin="250,30,0,0" Content="{Binding CancelText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="80"></Button>
+                        <Button Command="{Binding SendCommentCommand}" CommandParameter="{Binding ElementName=CommentTxtBox}" Margin="20,30,0,0" Content="{Binding SendText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="80"></Button>
                     </StackPanel>
 
-                    <ListView ItemsSource="{Binding Comments}" Margin="290,0,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" materialDesign:ListBoxItemAssist.ShowSelection="False">
+                    <ListView ItemsSource="{Binding Comments}" Margin="205,0,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" materialDesign:ListBoxItemAssist.ShowSelection="False">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

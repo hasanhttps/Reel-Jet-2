@@ -1487,7 +1487,8 @@
           "Microsoft.EntityFrameworkCore.Proxies": "6.0.23",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.23",
           "Microsoft.Extensions.Configuration": "6.0.1",
-          "Microsoft.Extensions.Configuration.Json": "6.0.0"
+          "Microsoft.Extensions.Configuration.Json": "6.0.0",
+          "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
           "ReelJet.Database.dll": {}

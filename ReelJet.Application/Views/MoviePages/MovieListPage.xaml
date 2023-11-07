@@ -6,6 +6,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ut="clr-namespace:Reel_Jet.Utilities"
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:database="clr-namespace:ReelJet.Application.Models.DatabaseNamespace"
       xmlns:local="clr-namespace:Reel_Jet.Views.MoviePages"
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920" Background="#1F1F2B"
@@ -35,7 +36,7 @@
 
             <Grid Grid.Row="0">
 
-                <ut:SearchBox x:Name="SearchFilm" PlaceHolder="Search" Height="40" Width="500">
+                <ut:SearchBox x:Name="SearchFilm" PlaceHolder="{Binding SearchText, Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="500">
                     <ut:SearchBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SearchFilm, Path=content}"/>
                     </ut:SearchBox.InputBindings>
@@ -45,7 +46,7 @@
                     Width="170" FontSize="12" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"
                     Foreground="White" HorizontalAlignment="Right" Margin="0 0 30 10"
                     
-                    ma:HintAssist.Hint="Filter Movies" 
+                    ma:HintAssist.Hint="{Binding FilterMoviesText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}">
 
                     <i:Interaction.Triggers>
@@ -57,10 +58,10 @@
                     </i:Interaction.Triggers>
 
 
-                    <ComboBoxItem Content="Popular" Foreground="Black"></ComboBoxItem>
-                    <ComboBoxItem Content="Now Playing" Foreground="Black"></ComboBoxItem>
-                    <ComboBoxItem Content="Upcoming" Foreground="Black"></ComboBoxItem>
-                    <ComboBoxItem Content="Top Rated" Foreground="Black"></ComboBoxItem>
+                    <ComboBoxItem Content="{Binding PopularText, Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black"></ComboBoxItem>
+                    <ComboBoxItem Content="{Binding NowPlayingText, Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black"></ComboBoxItem>
+                    <ComboBoxItem Content="{Binding UpcomingText, Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black"></ComboBoxItem>
+                    <ComboBoxItem Content="{Binding TopRatedText, Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black"></ComboBoxItem>
                 </ComboBox>
 
             </Grid>

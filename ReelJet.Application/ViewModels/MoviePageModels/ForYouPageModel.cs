@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using Reel_Jet.Views.MoviePages;
 using System.Collections.ObjectModel;
 using Reel_Jet.Views.NavigationBarPages;
+using ReelJet.Database.Entities.Concretes;
 using ReelJet.Application.Models.EntityAdapters;
 using ReelJet.Application.Models.DatabaseNamespace;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
@@ -39,6 +40,7 @@ namespace ReelJet.Application.ViewModels.MoviePageModels {
             foreach (var movie in personalMovies) {
 
                 PersonalMovieAdapter movieAdapter = new() {
+                    Id = movie.Id,
                     Avatar = UserAuthentication.LoadImage(movie.User.Avatar!),
                     Poster = UserAuthentication.LoadImage(movie.Poster),
                     Description = movie.Description,
@@ -47,6 +49,7 @@ namespace ReelJet.Application.ViewModels.MoviePageModels {
                     ViewCount = movie.ViewCount,
                     LikeCount = movie.LikeCount,
                     Minute = movie.Minute,
+                    Title = movie.Title,
                     Hour = movie.Hour,
                     User = movie.User,
                 };
@@ -78,6 +81,9 @@ namespace ReelJet.Application.ViewModels.MoviePageModels {
 
         private void SelectionChanged(object? param) {
 
+            PersonalMovieAdapter personalMovieAdapter = (PersonalMovieAdapter)param;
+            PersonalMovie personalMovie = DbContext.PersonalMovies.Where(movie => movie.Id == personalMovieAdapter.Id).First();
+            MainFrame.Content = new VideoPlayerPage(MainFrame, personalMovie, "personalmovie");
         }
 
         private void Search(object? param) {

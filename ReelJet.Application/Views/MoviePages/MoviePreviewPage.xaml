@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:ut="clr-namespace:Reel_Jet.Utilities"
+      xmlns:database="clr-namespace:ReelJet.Application.Models.DatabaseNamespace"
       xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
       xmlns:local="clr-namespace:Reel_Jet.Views.MoviePages"
       mc:Ignorable="d" 
@@ -21,6 +22,7 @@
             <Button Margin="0 60 0 0" VerticalAlignment="Top" Style="{StaticResource NavigationWatchListButton}" Command="{Binding WatchListPgButtonCommand}"/>
             <Button Margin="0 110 0 0" VerticalAlignment="Top" Style="{StaticResource NavigationHistoryButton}" Command="{Binding HistoryPgButtonCommand}"/>
             <Button Margin="0 160 0 0" VerticalAlignment="Top" Style="{StaticResource NavigationMovieListButton}" Command="{Binding MovieListPageCommand}"/>
+            <Button Margin="0 210 0 0" VerticalAlignment="Top" Style="{StaticResource NavigationForYouButton}" Command="{Binding ForYouPageCommand}"/>
             <Button Margin="0 0 0 70" VerticalAlignment="Bottom" Style="{StaticResource NavigationSettingsButton}" Command="{Binding SettingsPgButtonCommand}"/>
             <Button Margin="0 0 0 20" VerticalAlignment="Bottom" Style="{StaticResource NavigationProfileButton}" Command="{Binding ProfilePgButtonCommand}"/>
 
@@ -51,7 +53,7 @@
                         
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                             <StackPanel Margin="0 0 5 0">
-                                <TextBlock Text="IMDb RATING" Foreground="#C1BABB" FontSize="15" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding ImdbRatingText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="#C1BABB" FontSize="15" FontWeight="Medium"/>
 
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <Image Height="16" Width="16" Source="{StaticResource StarImg}"/>
@@ -74,21 +76,21 @@
                     <Line X1="0" X2="1381" Stroke="#C1BABB" StrokeThickness="0.3"/>
 
                     <StackPanel Orientation="Horizontal" Margin="0 12 0 12">
-                        <TextBlock Text="Director  " Foreground="White" FontSize="15" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding DirectorText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         <TextBlock Text="{Binding Movie.Director}" FontSize="15" Foreground="#C1BABB"/>
                     </StackPanel>
 
                     <Line X1="0" X2="1381" Stroke="#C1BABB" StrokeThickness="0.3"/>
 
                     <StackPanel Orientation="Horizontal" Margin="0 12 0 12">
-                        <TextBlock Text="Writers  " Foreground="White" FontSize="15" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding WritersText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         <TextBlock Text="{Binding Movie.Writer}" FontSize="15" Foreground="#C1BABB"/>
                     </StackPanel>
 
                     <Line X1="0" X2="1381" Stroke="#C1BABB" StrokeThickness="0.3"/>
 
                     <StackPanel Orientation="Horizontal" Margin="0 12 0 12">
-                        <TextBlock Text="Stars  " Foreground="White" FontSize="15" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding StarsText,Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" FontSize="15" FontWeight="Bold"/>
                         <TextBlock Text="{Binding Movie.Actors}" FontSize="15" Foreground="#C1BABB"/>
                     </StackPanel>
 

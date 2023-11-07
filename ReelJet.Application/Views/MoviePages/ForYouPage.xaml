@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:ut="clr-namespace:Reel_Jet.Utilities"
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:database="clr-namespace:ReelJet.Application.Models.DatabaseNamespace"
       xmlns:local="clr-namespace:ReelJet.Application.Views.MoviePages"
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920" Background="#1F1F2B"
@@ -34,7 +35,7 @@
 
             <Grid Grid.Row="0">
 
-                <ut:SearchBox x:Name="SearchFilm" PlaceHolder="Search" Height="40" Width="500">
+                <ut:SearchBox x:Name="SearchFilm" PlaceHolder="{Binding SearchText, Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="500">
                     <ut:SearchBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SearchFilm, Path=content}"/>
                     </ut:SearchBox.InputBindings>
@@ -63,10 +64,11 @@
                                         </Border.Background>
                                     </Border>
                                 </Grid>
-                                <TextBlock  Text="{Binding User.Username}" Margin="5 10 0 10" Foreground="White" FontSize="14" FontWeight="Medium" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"/>
-                                <TextBlock Margin="5 0 0 0" Text="{Binding Description}" Foreground="White" FontSize="12" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"/>
+                                <TextBlock Text="{Binding User.Username}" Margin="15 10 0 10" Foreground="White" FontSize="14" FontWeight="Medium" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"/>
+                                <TextBlock Margin="15 0 0 0" Text="{Binding Title}" Foreground="White" FontSize="12" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"/>
+                                <TextBlock Margin="15 5 0 0" Text="{Binding Description}" Foreground="White" FontSize="12" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"/>
 
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Margin="15 10 0 0">
                                     <TextBlock Text="Views " Foreground="#A9A9A9" FontSize="12" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"/>
                                     <TextBlock Text="{Binding ViewCount}" Foreground="#A9A9A9" FontSize="12" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"/>
                                     <TextBlock Text="Likes " Margin="30 0 0 0" Foreground="#A9A9A9" FontSize="12" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand"/>

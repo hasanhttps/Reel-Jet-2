@@ -5,6 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ut="clr-namespace:Reel_Jet.Utilities"
       xmlns:local="clr-namespace:Reel_Jet.Views.RegistrationPages"
+      xmlns:ma="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920"
       Title="SignupPage">
@@ -12,7 +14,35 @@
     <Grid Background="Black">
 
         <Image Source="{StaticResource SignInBackground}" Opacity="0.1" Stretch="UniformToFill"></Image>
+        <ComboBox Name="ComboBox" Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" 
+                  ma:HintAssist.Hint="LNG"    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="50" Foreground="White">
 
+            <ComboBoxItem>
+                <ComboBoxItem.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource AzeFlagImg}" Height="25" Margin="0 -4 10 0" Stretch="UniformToFill"></Image>
+                        <TextBlock Text="AZE"></TextBlock>
+                    </StackPanel>
+                </ComboBoxItem.Content>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <ComboBoxItem.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource UKFlagImg}" Height="25" Margin="0 -4 10 0" Stretch="UniformToFill"></Image>
+                        <TextBlock Text="ENG"></TextBlock>
+                    </StackPanel>
+                </ComboBoxItem.Content>
+            </ComboBoxItem>
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding LanguageSelectionChangedCommand}" 
+                        CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBox}}, UpdateSourceTrigger=PropertyChanged}"
+                        />
+
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ComboBox>
         <Grid Width="800" Height="450">
 
             <Grid.ColumnDefinitions>

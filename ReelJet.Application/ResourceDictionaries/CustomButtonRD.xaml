@@ -3,7 +3,7 @@
                     xmlns:database="clr-namespace:ReelJet.Application.Models.DatabaseNamespace">
 
     <Style TargetType="Button">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -23,7 +23,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -32,7 +32,7 @@
     </Style>
 
     <Style TargetType="Button" x:Key="EditButtonForAccount">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -52,7 +52,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -61,7 +61,7 @@
     </Style>
 
     <Style TargetType="Button" x:Key="ButtonForWatchList">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -70,7 +70,7 @@
                         </Border>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Image Source="{StaticResource PlusImg}" Width="15" Height="15"></Image>
-                            <ContentPresenter Margin="5 0 0 0" Content="Watchlist" VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
+                            <ContentPresenter Margin="5 0 0 0" Content="{Binding WatchListText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
                         </StackPanel>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -84,7 +84,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -93,7 +93,7 @@
     </Style>
 
     <Style TargetType="Button" x:Key="NavigationWatchListButton">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -101,7 +101,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -110,7 +110,7 @@
     </Style>
 
     <Style TargetType="Button" x:Key="NavigationHistoryButton">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -118,7 +118,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -127,7 +127,7 @@
     </Style>
 
     <Style TargetType="Button" x:Key="NavigationMovieListButton">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -135,7 +135,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -144,7 +144,7 @@
     </Style>
 
     <Style TargetType="Button" x:Key="NavigationForYouButton">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -152,7 +152,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -161,7 +161,7 @@
     </Style>
 
     <Style TargetType="Button" x:Key="NavigationSettingsButton">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -169,7 +169,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -178,7 +178,7 @@
     </Style>
 
     <Style TargetType="Button" x:Key="NavigationProfileButton">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -190,7 +190,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -199,20 +199,20 @@
     </Style>
 
     <Style TargetType="Button" x:Key="WatchMovieButton">
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border CornerRadius="4" Height="40" Width="145" Background="#3A3CB3" BorderBrush="#12121A" HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Watch Movie" FontSize="12" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Margin="25 0 15 0"/>
+                            <TextBlock Text="{Binding WatchMovieText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Margin="25 0 15 0"/>
                             <Image Source="{StaticResource WatchMovieImg}" Height="20.56" Width="20" VerticalAlignment="Center" Margin="0 0 15 0"/>
                         </StackPanel>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Cursor" Value="Hand"/>
@@ -228,7 +228,7 @@
                     <Border CornerRadius="3" Name="buttonborder" Width="100">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{StaticResource PlayImg}" Width="20" Height="20" Margin="10 0 5 0"></Image>
-                            <TextBlock Text="Trailer" FontSize="11" Foreground="White" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" Margin="0 3 0 0"></TextBlock>
+                            <TextBlock Text="{Binding TrailerText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="11" Foreground="White" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" Margin="0 3 0 0"></TextBlock>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>

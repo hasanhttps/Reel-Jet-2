@@ -5,9 +5,7 @@ using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Threading;
 using Reel_Jet.Views.MoviePages;
-using Microsoft.Identity.Client;
 using Reel_Jet.Services.WebServices;
 using System.Collections.ObjectModel;
 using Reel_Jet.Models.MovieNamespace;
@@ -110,16 +108,16 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         private void SetCommands() {
 
-            WatchTrailerFromListCommand = new RelayCommand(SelectionChanged);
-            FilterSelectionChangedCommand = new RelayCommand(FilterSelectionChanged);
-            SelectionChangedCommand = new RelayCommand(SelectionChanged);
-            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
-            AddToWatchListCommand = new RelayCommand(AddToWatchList);
-            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
+            SearchCommand = new RelayCommand(Search);
+            ForYouPgButtonCommand = new RelayCommand(ForYouPage);
             HistoryPgButtonCommand = new RelayCommand(HistoryPage);
             ProfilePgButtonCommand = new RelayCommand(ProfilePage);
-            ForYouPgButtonCommand = new RelayCommand(ForYouPage);
-            SearchCommand = new RelayCommand(Search);
+            AddToWatchListCommand = new RelayCommand(AddToWatchList);
+            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
+            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
+            SelectionChangedCommand = new RelayCommand(SelectionChanged);
+            WatchTrailerFromListCommand = new RelayCommand(SelectionChanged);
+            FilterSelectionChangedCommand = new RelayCommand(FilterSelectionChanged);
         }
 
         private async void TaskToJson(string title) {
@@ -147,18 +145,19 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         private void GetPopularMoviesFromDatabase(string filterchoice) {
 
-            if (filterchoice == "popular")
+            if (filterchoice == "popular" || filterchoice == "populyar")
                 foreach (var item in Database.PopularMovies)
                     Movies.Add(item);
-            else if (filterchoice == "top_rated")
+            else if (filterchoice == "top_rated" || filterchoice == "yüksək_reytinqli")
                 foreach (var item in Database.TopRatedMovies)
                     Movies.Add(item);
-            else if (filterchoice == "upcoming")
+            else if (filterchoice == "upcoming" || filterchoice=="tezliklə")
                 foreach (var item in Database.UpcomingMovies)
                     Movies.Add(item);
-            else if (filterchoice == "now_playing")
+            else if (filterchoice == "now_playing" || filterchoice=="yeni")
                 foreach (var item in Database.NowPlayingMovies)
                     Movies.Add(item);
+
         }
 
         private void AddToWatchList(object? sender) {
@@ -232,7 +231,6 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
             string selectedfilter = (param as ComboBoxItem).Content.ToString().ToLower();
             selectedfilter = selectedfilter.Replace(" ", "_");
             GetPopularMoviesFromDatabase(selectedfilter);
-
         }
 
         // INotifyPropertyChanged

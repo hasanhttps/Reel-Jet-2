@@ -1,14 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using Reel_Jet.Commands;
+﻿using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.Windows.Controls;
 using Reel_Jet.Views.MoviePages;
 using ReelJet.Database.Entities;
 using System.Collections.ObjectModel;
 using Reel_Jet.Views.NavigationBarPages;
+using ReelJet.Application.Views.MoviePages;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
+
 
 namespace Reel_Jet.ViewModels.NavigationBarPageModels {
     public class HistoryPageModel {
@@ -19,30 +18,22 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
         // Binding Properties
 
-        public ObservableCollection<Movie> HistoryList { get; set; } = new();
-        public ICommand? WatchListPgButtonCommand { get; set; }
+        public ICommand ForYouPageCommand { get; set; }
+        public ICommand? MoviePgButtonCommand { get; set; }
+        public ICommand? ProfilePgButtonCommand { get; set; }
         public ICommand? SelectionChangedCommand { get; set; }
         public ICommand? SettingsPgButtonCommand { get; set; }
-        public ICommand? ProfilePgButtonCommand { get; set; }
-        public ICommand? MoviePgButtonCommand { get; set; }
+        public ICommand? WatchListPgButtonCommand { get; set; }
+        public ObservableCollection<Movie> HistoryList { get; set; } = new();
 
         // Constructor
 
         public HistoryPageModel(Frame frame) {
 
-            if (CurrentUser.HistoryList != null) {
-                foreach (var movie in CurrentUser.HistoryList) {
-                    HistoryList.Add(movie.Movie);
-                }
-            }
-
             MainFrame = frame;
 
-            SelectionChangedCommand = new RelayCommand(SelectionChanged);
-            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
-            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
-            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
-            MoviePgButtonCommand = new RelayCommand(MovieListPage);
+            WriteHistoryList();
+            SetCommands();
         }
 
         // Functions
@@ -66,6 +57,29 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
         private void SettingsPage(object? sender) {
             MainFrame.Content = new SettingsPage(MainFrame);
+        }
+
+        private void ForYouPage(object? sender) {
+            MainFrame.Content = new ForYouPage(MainFrame);
+        }
+
+        private void WriteHistoryList() { 
+            
+            if (CurrentUser.HistoryList != null) {
+                foreach (var movie in CurrentUser.HistoryList) {
+                    HistoryList.Add(movie.Movie);
+                }
+            }
+        }
+
+        private void SetCommands()  {
+
+            ForYouPageCommand = new RelayCommand(ForYouPage);
+            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
+            MoviePgButtonCommand = new RelayCommand(MovieListPage);
+            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
+            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
+            SelectionChangedCommand = new RelayCommand(SelectionChanged);
         }
     }
 }

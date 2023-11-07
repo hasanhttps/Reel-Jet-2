@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using System.Net.Http;
 using HtmlAgilityPack;
 using System.ComponentModel;
@@ -7,7 +6,11 @@ using System.Windows.Controls;
 using ReelJet.Database.Entities;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using ReelJet.Database.Entities.Concretes;
+using ReelJet.Database.Entities.Abstracts;
 using Reel_Jet.Views.MoviePages.VideoPlayerPages;
+using ReelJet.Application.Models.ServerNamespace.Abstracts;
+using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
 #nullable disable
 
@@ -17,19 +20,20 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
         // Private Fields
 
         private Movie Movie;
-        private Frame MainFrame;
-        private string _videoPgUrl;
-        private string _videoUrl;
         private string _search;
+        private Frame MainFrame;
+        private string _videoUrl;
+        private string _videoPgUrl;
+        private BaseMovie BaseMovie;
+        private string serverName = null;
+        private PersonalMovie PersonalMovie;
 
-        // Binding Properties
-
+        // Public Fields
 
         public object PrevFrame;
         public Frame VideoPlayerFrame;
         public FullScreenPage fullScreenPage;
-
-        public ObservableCollection<Reel_Jet.Models.MovieNamespace.Option> Options { get; set; }
+        public ObservableCollection<Reel_Jet.Models.MovieNamespace.Option> Options { get; set; } 
         public string VideoUrl {
             get => _videoUrl;
             set {
@@ -39,26 +43,49 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         // Constructor
 
-        public VideoPlayerPageModel(Frame frame, Movie movie, Frame videoplayerframe) {
+        public VideoPlayerPageModel(Frame frame, BaseMovie basemovie, Frame videoplayerframe, string? movietype = "film") {
+
+            ScrapingServers.Clear();
             VideoPlayerFrame = videoplayerframe;
             MainFrame = frame;
-            Movie = movie;
+            BaseMovie = basemovie;
 
-            SearchAlgorithm(movie.Title);
-            if (!CheckMovieExist()) {
+            if (movietype == "film") {
 
-                VideoPlayerFrame.Content = new MinimizeScreenPage(frame, movie, Options, $"https://multiembed.mov/?video_id={Movie.imdbID}", _videoPgUrl);
+                Movie = (BaseMovie as Movie);
+
+                SearchAlgorithm(Movie.Title);
+                if (!CheckMovieExist()) {
+                    VideoPlayerFrame.Content = new MinimizeScreenPage(frame, Movie, Options, $"https://multiembed.mov/?video_id={Movie.imdbID}", _videoPgUrl);
+                }
+                else VideoPlayerFrame.Content = new MinimizeScreenPage(frame, Movie, Options, VideoUrl, _videoPgUrl);
             }
-            else VideoPlayerFrame.Content = new MinimizeScreenPage(frame, movie, Options, VideoUrl, _videoPgUrl);
+            else {
+                PersonalMovie = basemovie as PersonalMovie;
+                VideoPlayerFrame.Content = new MinimizeScreenPage(frame, PersonalMovie, Options, PersonalMovie.MovieLink, _videoPgUrl, movietype);
+            }
+
         }
 
         // Functions
 
         private bool CheckMovieExist() {
-            if (ScrapeDiziBox()) return true;
-            else if (ScrapeFullFilmIzleNet()) return true;
-            else if (ScrapeFullHdIzle()) return true;
-            return false;
+
+            if (ScrapeFullHdIzle()) serverName = "Multiple Server 3";
+            if (ScrapeFullFilmIzleNet()) serverName = "Multiple Server 2";
+            if (ScrapeDiziBox()) serverName = "Multiple Server 1";
+
+            if (serverName == null) return false;
+            else {
+                foreach(var server in ScrapingServers)
+                    if (server.ServerName == serverName) {
+                        Options = server.Options;
+                        VideoUrl = server.VideoFrameUrl;
+                        _videoPgUrl = server.VideoPageUrl;
+                        break;
+                    }
+                return true;
+            }
         }
 
         private void SearchAlgorithm(string title) {
@@ -104,6 +131,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
             HtmlAttribute? scr = null;
             HtmlNodeCollection movieDetailNodes = htmlDocument.DocumentNode.SelectNodes("//div[@class='movie-details existing-details']");
 
+            if (movieDetailNodes == null) return null;
             foreach (var node in movieDetailNodes) {
                 try {
                     if (node.InnerText.Contains(Movie.Year)) {
@@ -129,8 +157,17 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         private bool ScrapeDiziBox() {
             try {
+                ScrapingServer server = new();
+                ScrapingServers.Add(server);
+                server.ServerName = "Multiple Server 1";
                 string? VideoPageLink = FindVideoLink("https://www.dizifilmbox.pw/?s=");
+                server.VideoPageUrl = VideoPageLink;
                 FindEmbedVideoLink(VideoPageLink);
+                server.VideoFrameUrl = VideoUrl;
+                server.Options = new();
+                foreach(var option in Options) {
+                    server.Options.Add(option);
+                }
                 _videoPgUrl = VideoPageLink;
                 return true;
             }
@@ -143,9 +180,18 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         private bool ScrapeFullFilmIzleNet() {
             try {
+                ScrapingServer server = new();
+                ScrapingServers.Add(server);
+                server.ServerName = "Multiple Server 2";
                 string? VideoPageLink = FindVideoLink("https://fullfilmizle.net/?s=");
+                server.VideoPageUrl = VideoPageLink;
                 FindEmbedVideoLink(VideoPageLink);
                 _videoPgUrl = VideoPageLink;
+                server.VideoFrameUrl = VideoUrl;
+                server.Options = new();
+                foreach(var option in Options) {
+                    server.Options.Add(option);
+                }
                 return true;
             }
             catch {
@@ -157,9 +203,18 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         private bool ScrapeFullHdIzle() {
             try {
+                ScrapingServer server = new();
+                ScrapingServers.Add(server);
+                server.ServerName = "Multiple Server 3";
                 string? VideoPageLink = FindVideoLink("https://www.fullhdizle.me/?s=");
+                server.VideoPageUrl = VideoPageLink;
                 FindEmbedVideoLink(VideoPageLink);
                 _videoPgUrl = VideoPageLink;
+                server.VideoFrameUrl = VideoUrl;
+                server.Options = new();
+                foreach(var option in Options) {
+                    server.Options.Add(option);
+                }
                 return true;
             }
             catch {
