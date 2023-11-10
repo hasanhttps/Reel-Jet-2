@@ -1,5 +1,5 @@
 {
   "ConnectionStrings": {
-    "Sql": "Data Source=ASUSTUFGAMING\\SQLEXPRESS01;Integrated Security=True;Initial Catalog=ReelJet;Connect Timeout=30;Encrypt=False;"
+    "Sql": "Server=192.168.1.101,1433\\desktop-kkd6gs8\\mssqlserver02;Database=ReelJet;User Id=SuperAdmin;Password=SuperAdmin;TrustServerCertificate=True;"
   }
 }
