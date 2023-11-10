@@ -107,11 +107,11 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                     }
                 }
 
-            else if (DbContext.Movies != null) {
-                var movies = DbContext.CommentsMovies.ToList();
+            if (DbContext.Movies != null && !isContain) {
+                var movies = DbContext.Movies.ToList();
                 if (movies != null) {
                     foreach (var movie in movies) {
-                        if (movie.Movie.Title == Movie.Title && movie.Movie.imdbID == Movie.imdbID) {
+                        if (movie.Title == Movie.Title && movie.imdbID == Movie.imdbID) {
  
                             ReelJet.Database.Entities.Concretes.UserHistoryList historyList = new() {
                                 UserId = CurrentUser.Id,
@@ -121,7 +121,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                             DbContext.HistoryLists.Add(historyList);
                             DbContext.SaveChanges();
  
-                            MovieAdapter = movie.Movie;
+                            MovieAdapter = movie;
                             isContain = true;
                         }
                     }
@@ -173,10 +173,9 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                         MovieId = movie.Id
                     });
  
-                DbContext.HistoryLists.Add(historyList);
- 
+                DbContext.HistoryLists.Add(historyList); 
                 DbContext.SaveChanges();
- 
+
                 MovieAdapter = movie;
             }
  

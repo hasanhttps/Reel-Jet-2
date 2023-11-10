@@ -98,6 +98,19 @@
 
                     </ListView>
 
+                    <StackPanel Orientation="Horizontal" Margin="210 20 0 0" Height="50">
+                        <TextBlock Text="Views: " Foreground="White" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" FontSize="20" FontWeight="Medium"/>
+                        <TextBlock Text="{Binding ViewCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" FontSize="20" FontWeight="Medium"/>
+                        <TextBlock Margin="80 0 0 0" Text="Like Count: " Foreground="White" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" FontSize="20" FontWeight="Medium"/>
+                        <TextBlock Text="{Binding LikeCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" FontFamily="/Static Files/Fonts/QuickSand/#Quicksand" FontSize="20" FontWeight="Medium"/>
+                        <Button Margin="750 0 0 0" Command="{Binding LikeBtCommand}"
+                                 Height="50" Width="50"
+                                 Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                 Background="Transparent">
+                                <materialDesign:PackIcon  Kind="Like"/>
+                            </Button>
+                    </StackPanel>
+
                     <StackPanel Orientation="Horizontal" Margin="205,20,0,30">
                         <TextBlock Text="{Binding Comments.Count}" FontSize="20" FontWeight="Medium" Foreground="White"/>
                         <TextBlock Text="{Binding CommentText , Source={x:Static database:Database.CurrentLanguageControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontWeight="Medium" Foreground="White"/>

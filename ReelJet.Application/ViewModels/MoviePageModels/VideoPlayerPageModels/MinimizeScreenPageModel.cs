@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Http;
 using HtmlAgilityPack;
+using System.Net.Http;
 using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.ComponentModel;
@@ -10,25 +10,35 @@ using Reel_Jet.Views.MoviePages;
 using ReelJet.Database.Entities;
 using Microsoft.Web.WebView2.Wpf;
 using Microsoft.Web.WebView2.Core;
-using System.Collections.ObjectModel;
+using System.Collections.ObjectModel; 
 using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
-using ReelJet.Database.Entities.Concretes;
 using ReelJet.Database.Entities.Abstracts;
+using ReelJet.Database.Entities.Concretes;
 using ReelJet.Application.Views.MoviePages;
 using ReelJet.Application.Models.EntityAdapters;
 using Reel_Jet.Views.MoviePages.VideoPlayerPages;
 using ReelJet.Application.Models.DatabaseNamespace;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
+
 #nullable disable
 
 namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
     public class MinimizeScreenPageModel : INotifyPropertyChanged {
  
+        // INotifyPropertyChanged
+ 
+        public event PropertyChangedEventHandler? PropertyChanged;
+ 
+        public void OnPropertyChanged([CallerMemberName] string? propertyName = null) { 
+            PropertyChanged!.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
          // Private Fields
  
         private Movie Movie;
+        private int viewCount;
+        private int likeCount;
         private Frame MainFrame;
         private WebView2 Player;
         private string _username;
@@ -50,6 +60,18 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
                 OnPropertyChanged();
             }
         }
+        public int ViewCount { get => viewCount; 
+            set {
+                viewCount = value;
+                OnPropertyChanged();
+            } 
+        }
+        public int LikeCount { get => likeCount; 
+            set {
+                likeCount = value;
+                OnPropertyChanged();
+            } 
+        }
         public string NewComment {
             get => newcomment;
             set {
@@ -66,6 +88,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
         }
  
         public Frame PlayerFrame { get; set; }
+        public ICommand LikeBtCommand { get; set; }
         public ICommand ForYouPageCommand { get; set; }
         public ICommand SendCommentCommand { get; set; }
         public ICommand MovieListPageCommand { get; set; }
@@ -97,6 +120,8 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
  
             MainFrame = frame;
             BaseMovie = basemovie;
+            viewCount = basemovie.ViewCount;
+            likeCount = basemovie.LikeCount;
             Player = player;
             VideoUrl = videoUrl;
             PlayerFrame = playerframe;
@@ -139,9 +164,10 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
             MainFrame.Content = new SettingsPage(MainFrame);
         }
 
-        private void ForYouPage(object? sender) { 
+        private void ForYouPage(object? sender) {
             MainFrame.Content = new ForYouPage(MainFrame);
         }
+
 
         private void Player_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e) {
             Player.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
@@ -149,6 +175,18 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
 
         private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs e) {
             e.Handled = true;
+        }
+
+        private void LikeButton(object? sender) { 
+            if (_movietype == "film") {
+                DbContext.Movies.Where(m => m.Id == Movie.Id).First().LikeCount++;
+                DbContext.SaveChanges();
+            }
+            else {
+                DbContext.PersonalMovies.Where(m => m.Id == PersonalMovie.Id).First().LikeCount++;
+                DbContext.SaveChanges();
+            }
+            LikeCount++;
         }
 
         private void ChangeServer(object? param) {
@@ -189,6 +227,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
  
         private void SetCommands() {
 
+            LikeBtCommand = new RelayCommand(LikeButton);
             ForYouPageCommand = new RelayCommand(ForYouPage);
             SendCommentCommand = new RelayCommand(SendComment);
             MovieListPageCommand = new RelayCommand(MovieListPage);
@@ -310,13 +349,6 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
             }
         }
 
-        // INotifyPropertyChanged
- 
-        public event PropertyChangedEventHandler? PropertyChanged;
- 
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null) { 
-            PropertyChanged!.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
  
     }
 }
