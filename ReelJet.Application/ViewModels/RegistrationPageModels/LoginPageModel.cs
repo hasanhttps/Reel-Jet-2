@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using Reel_Jet.Views.MoviePages;
 using System.Runtime.CompilerServices;
 using ReelJet.Database.Entities.Concretes;
+using ReelJet.Application.Models.EntityAdapters;
 using ReelJet.Application.Models.DatabaseNamespace;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 using static ReelJet.Application.Models.DatabaseNamespace.JsonHandling;
@@ -21,7 +22,7 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
 
         // Binding Properties
 
-        public User NewUser { get; set; } = new();
+        public UserAdapter NewUser { get; set; } = new();
         public ICommand? SignInCommand { get; set; }
         public ICommand? LanguageSelectionChangedCommand { get; set; }
 
@@ -45,16 +46,17 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
                             selectedlng = tb.Text;
                     }
             if (selectedlng=="AZE")
-                CurrentLanguageControl.DeepCopy(ReadData<AzerbaijaniLanguageControl>("aze"));
+                CurrentLanguageControl.DeepCopy(ReadData<AzerbaijaniLanguageControl>("aze")!);
             else if (selectedlng=="ENG")
-                CurrentLanguageControl.DeepCopy(ReadData<EnglishLanguageControl>("eng"));
+                CurrentLanguageControl.DeepCopy(ReadData<EnglishLanguageControl>("eng")!);
         }
 
         private void SignIn(object? param) {
-            UserAuthentication authentication = new();
 
+            UserAuthentication authentication = new();
+            
             if (!string.IsNullOrEmpty(NewUser.Email) && !string.IsNullOrEmpty(NewUser.Password))
-                if (authentication.LogIn(NewUser)) {
+                if (authentication.LogIn(NewUser.ConvertToUser())) {
                     userAuthentication.Avatar = UserAuthentication.LoadImage(CurrentUser.Avatar);
                     Thread fileMemoryThread = new Thread(() => {
                         WriteData<int>(CurrentUser.Id, "logs");

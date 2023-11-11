@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using System.IO.Pipes;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 using System.Runtime.CompilerServices;
@@ -25,8 +24,31 @@ public class UserAuthentication : IAuthLoginService, IAuthLogOutService, IAuthSi
         } 
     }
 
-
     // Functions
+
+    public void SetDefaultPfp(User newUser) {
+
+        try {
+            string currentDirectory = Environment.CurrentDirectory;
+            string parentDirectory = Directory.GetParent(Directory.GetParent(Directory.GetParent(currentDirectory)!.FullName)!.FullName)!.FullName;
+
+            if (parentDirectory != null) {
+                string imagePath = Path.Combine(parentDirectory, "Static Files", "Images", "MaleUserProfile.png");
+
+                using (FileStream fs = new FileStream(imagePath, FileMode.Open)) {
+                    using (BinaryReader br = new BinaryReader(fs)) {
+                        newUser.Avatar = br.ReadBytes((int)fs.Length);
+                        Avatar = LoadImage(newUser.Avatar!);
+                    }
+                }
+            }
+            else
+                MessageBox.Show("No parent directory found.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
 
     public bool LogIn(User user) {
 
@@ -37,17 +59,10 @@ public class UserAuthentication : IAuthLoginService, IAuthLogOutService, IAuthSi
     }
 
     public bool SignUp(User newUser) {
+
         if (!CheckUserExist(newUser.Email!, newUser.Password!)) {
-
-            //string imagePath = AppDomain.CurrentDomain + "/Static Files/Images/MaleUserProfile.png";
-
-            //using (FileStream fs = new FileStream(imagePath, FileMode.Open, FileAccess.Read)) {
-            //    using (BinaryReader br = new BinaryReader(fs)) {
-            //        newUser.Avatar = br.ReadBytes((int)fs.Length);
-            //        Avatar = LoadImage(newUser.Avatar!);
-            //    }
-            //}
-
+           
+            SetDefaultPfp(newUser);
             CurrentUser = newUser;
             Users.Add(newUser);
 

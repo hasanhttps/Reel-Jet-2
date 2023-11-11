@@ -10,11 +10,12 @@ using Reel_Jet.Views.MoviePages;
 using System.Windows.Media.Imaging;
 using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
-using ReelJet.Database.Entities.Concretes;
 using ReelJet.Application.Views.MoviePages;
+using ReelJet.Application.Models.EntityAdapters;
 using ReelJet.Application.Models.DatabaseNamespace;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
+#nullable disable
 
 namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
@@ -33,7 +34,7 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
             } 
         }
         public ICommand? EditPfpCommand { get; set; }
-        public User EditedUser { get; set; } = new();
+        public UserAdapter EditedUser { get; set; } = new();
         public ICommand? HistoryPgCommand { get; set; }
         public ICommand? ForYouPageCommand { get; set; }
         public ICommand? ConfirmChangeCommand { get; set; }

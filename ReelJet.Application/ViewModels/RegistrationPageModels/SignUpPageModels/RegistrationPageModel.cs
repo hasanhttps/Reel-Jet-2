@@ -5,9 +5,9 @@ using System.Windows.Input;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Runtime.CompilerServices;
-using ReelJet.Database.Entities.Concretes;
+using ReelJet.Application.Models.EntityAdapters;
 using Reel_Jet.Views.RegistrationPages.SignUpPages;
-using ReelJet.Application.Models.DatabaseNamespace;
+
 
 namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
     public class RegistrationPageModel {
@@ -20,7 +20,7 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
 
         // Binding Properties
 
-        public User newUser { get; set; } = new();
+        public UserAdapter newUser { get; set; } = new();
         public ICommand SignUpCommand { get; set; }
         public string? ConfirmPassword {
             get => confirmPassword;
@@ -43,13 +43,12 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
 
         public void SignUp(object? param) {
 
-            UserAuthentication userAuthentication = new();
             if (!string.IsNullOrEmpty(newUser.Name) && !string.IsNullOrEmpty(newUser.Surname) && newUser.Age != null &&
                 !string.IsNullOrEmpty(newUser.Username) && !string.IsNullOrEmpty(newUser.PhoneNumber) && !string.IsNullOrEmpty(newUser.Password) &&
                 !string.IsNullOrEmpty(ConfirmPassword)) {
 
                 if (ConfirmPassword == newUser.Password) 
-                    RegistrationFrame.Content = new ValidationPage(MainFrame, newUser, "Registration");
+                    RegistrationFrame.Content = new ValidationPage(MainFrame, newUser.ConvertToUser(), "Registration");
                 else
                     MessageBox.Show("Wrong Password Confirmation,Try Again", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }

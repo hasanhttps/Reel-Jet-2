@@ -16,12 +16,15 @@ using ReelJet.Application.Models.DatabaseNamespace;
 using static Reel_Jet.Services.WebServices.SmtpService;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
+#nullable disable
+
 namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
     public class ValidationPageModel : INotifyPropertyChanged {
 
         // Private Fields
 
         private string Process;
+        private Frame MainFrame;
         private string _regcode;
         private string regCodeNumber1;
         private string regCodeNumber2;
@@ -29,17 +32,15 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
         private string regCodeNumber4;
         private string regCodeNumber5;
         private string regCodeNumber6;
-        private int remainingSeconds = 300;
-        private Frame MainFrame;
         private DispatcherTimer timer;
-
+        private int remainingSeconds = 300;
 
         // Binding Properties
 
         public ICommand ConfirmCommand { get; set; }
         public User NewUser { get; set; } = new();
         public string RegCodeFromMail { get; set; }
-        public string TimerText => $"Time remaining: {remainingSeconds} seconds";
+        public string TimerText => $"{remainingSeconds}";
         public string RegCodeNumber1 {
             get => regCodeNumber1;
             set {
@@ -117,6 +118,7 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
                     string fullCode = RegCodeNumber1 + RegCodeNumber2 + RegCodeNumber3 + RegCodeNumber4 + RegCodeNumber5 + RegCodeNumber6;
                     if (fullCode == RegCodeFromMail && Process == "Registration") {
                         if (userAuthentication.SignUp(NewUser)) {
+                            
                             userAuthentication.Avatar = UserAuthentication.LoadImage(CurrentUser.Avatar);
                             MainFrame.Content = new MovieListPage(MainFrame);
                         }
@@ -127,7 +129,7 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels.SignUpPageModels {
                         DbContext.SaveChanges();
 
                         if (userAuthentication.LogIn(NewUser)) {
-                            userAuthentication.Avatar = UserAuthentication.LoadImage(CurrentUser.Avatar);
+                            userAuthentication.Avatar = UserAuthentication.LoadImage(CurrentUser.Avatar!);
                             MainFrame.Content = new MovieListPage(MainFrame);
                         }
                     }
