@@ -69,6 +69,10 @@
                             <Button Width="300" Background="#12121A" BorderBrush="#12121A" Margin="0 10 0 0" Height="50" HorizontalContentAlignment="Left" Command="{Binding MultipleServerButtonCommand}" CommandParameter="Multiple Server 4">
                                 <TextBlock Text="   Multiple Server 4" FontSize="15" FontWeight="Medium" Foreground="White"/>
                             </Button>
+
+                            <Button Width="300" Background="#12121A" BorderBrush="#12121A" Margin="0 10 0 0" Height="50" HorizontalContentAlignment="Left" Command="{Binding MultipleServerButtonCommand}" CommandParameter="Multiple Server 5">
+                                <TextBlock Text="   Multiple Server 5" FontSize="15" FontWeight="Medium" Foreground="White"/>
+                            </Button>
                         </StackPanel>
 
                     </StackPanel>

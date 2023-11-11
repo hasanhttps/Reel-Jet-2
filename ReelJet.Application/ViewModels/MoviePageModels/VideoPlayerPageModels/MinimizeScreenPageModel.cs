@@ -2,7 +2,6 @@
 using System.Linq;
 using HtmlAgilityPack;
 using System.Net.Http;
-using System.Threading;
 using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.ComponentModel;
@@ -172,6 +171,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
         }
 
         private void LikeButton(object? sender) { 
+
             if (_movietype == "film") {
                 DbContext.Movies.Where(m => m.Id == Movie.Id).First().LikeCount++;
                 DbContext.SaveChanges();
@@ -186,18 +186,27 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
         private void ChangeServer(object? param) {
 
             string serverName = param as string;
-            if (serverName == null) return;
+            if (serverName == null || _movietype != "film") return;
 
-            foreach(var server in ScrapingServers) 
-                if (serverName == server.ServerName && server.VideoFrameUrl != null) {
-                    VideoUrl = server.VideoFrameUrl;
-                    _videoPgUrl = server.VideoPageUrl;
-                    SetWebView2();
+            Options.Clear();
 
-                    Options.Clear();
-                    foreach (var option in server.Options)
-                        Options.Add(option);
-                }
+            if (serverName == "Multiple Server 4")
+                VideoUrl = $"https://multiembed.mov/?video_id={Movie.imdbID}";
+            else if (serverName == "Multiple Server 5")
+                VideoUrl = $"https://vidload.eu/embed/{Movie.imdbID}";
+            else {
+
+                foreach(var server in ScrapingServers) 
+                    if (serverName == server.ServerName && server.VideoFrameUrl != null) {
+                        VideoUrl = server.VideoFrameUrl;
+                        _videoPgUrl = server.VideoPageUrl;
+
+                        foreach (var option in server.Options)
+                            Options.Add(option);
+                    }
+            }
+
+            SetWebView2();
 
         }
 
