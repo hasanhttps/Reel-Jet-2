@@ -1,5 +1,5 @@
 {
   "ConnectionStrings": {
-    "Sql": "Server=192.168.1.101,1433\\desktop-kkd6gs8\\mssqlserver02;Database=ReelJet;User Id=SuperAdmin;Password=SuperAdmin;TrustServerCertificate=True;"
+    "Sql": "Server=tcp:reeljetserver.database.windows.net,1433;Initial Catalog=ReelJet;Persist Security Info=False;User ID=SuperAdmin;Password=aHsgd527gY-1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   }
 }

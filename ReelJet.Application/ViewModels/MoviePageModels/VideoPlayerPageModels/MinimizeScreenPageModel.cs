@@ -2,6 +2,7 @@
 using System.Linq;
 using HtmlAgilityPack;
 using System.Net.Http;
+using System.Threading;
 using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.ComponentModel;
@@ -27,13 +28,6 @@ using static ReelJet.Application.Models.DatabaseNamespace.Database;
 namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
     public class MinimizeScreenPageModel : INotifyPropertyChanged {
  
-        // INotifyPropertyChanged
- 
-        public event PropertyChangedEventHandler? PropertyChanged;
- 
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null) { 
-            PropertyChanged!.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
          // Private Fields
  
         private Movie Movie;
@@ -349,6 +343,13 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
             }
         }
 
+        // INotifyPropertyChanged
+ 
+        public event PropertyChangedEventHandler? PropertyChanged;
+ 
+        public void OnPropertyChanged([CallerMemberName] string? propertyName = null) { 
+            PropertyChanged!.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
  
     }
 }
