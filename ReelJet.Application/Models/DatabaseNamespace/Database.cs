@@ -25,6 +25,8 @@ public static class Database {
     public static ObservableCollection<Movie> UpcomingMovies { get; set; } = new();
     public static ObservableCollection<Movie> NowPlayingMovies { get; set; } = new();
     public static ObservableCollection<ScrapingServer> ScrapingServers { get; set; } = new();
+    public static ObservableCollection<ReelJet.Database.Entities.Movie> WatchLists { get; set; } = new();
+    public static ObservableCollection<ReelJet.Database.Entities.Movie> HistoryLists { get; set; } = new();
 
     // Constructor
 

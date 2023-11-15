@@ -11,6 +11,8 @@ using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
 namespace ReelJet.Application.ViewModels.NavigationBarPageModels.SettingsPageModels;
 
+#nullable disable
+
 public class UploadVideoPageModel : INotifyPropertyChanged {
 
     // Private Fields
@@ -49,6 +51,12 @@ public class UploadVideoPageModel : INotifyPropertyChanged {
     }
 
     private void UploadVideo(object? param) {
+
+        if (Hour == null || Minute == null || Description == null || MovieLink == null || Title == null) {
+
+            MessageBox.Show("You must fill all required fields.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
 
         PersonalMovie personalMovie = new() {
 

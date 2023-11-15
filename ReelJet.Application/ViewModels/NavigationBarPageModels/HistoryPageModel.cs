@@ -24,7 +24,7 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
         public ICommand? SelectionChangedCommand { get; set; }
         public ICommand? SettingsPgButtonCommand { get; set; }
         public ICommand? WatchListPgButtonCommand { get; set; }
-        public ObservableCollection<Movie> HistoryList { get; set; } = new();
+        public ObservableCollection<Movie> HistoryList { get; set; }
 
         // Constructor
 
@@ -63,13 +63,9 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
             MainFrame.Content = new ForYouPage(MainFrame);
         }
 
-        private void WriteHistoryList() { 
-            
-            if (CurrentUser.HistoryList != null) {
-                foreach (var movie in CurrentUser.HistoryList) {
-                    HistoryList.Add(movie.Movie);
-                }
-            }
+        private void WriteHistoryList() {
+
+            HistoryList = HistoryLists;
         }
 
         private void SetCommands()  {

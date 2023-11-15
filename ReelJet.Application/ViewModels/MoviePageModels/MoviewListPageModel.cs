@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Text.Json;
 using Reel_Jet.Commands;
 using System.Windows.Input;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using Reel_Jet.Views.MoviePages;
 using Reel_Jet.Services.WebServices;
@@ -13,10 +13,8 @@ using System.Runtime.CompilerServices;
 using Reel_Jet.Views.NavigationBarPages;
 using ReelJet.Application.Views.MoviePages;
 using ReelJet.Application.Models.DatabaseNamespace;
-using static Reel_Jet.Services.WebServices.OmdbService;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
-#nullable disable
 
 namespace Reel_Jet.ViewModels.MoviePageModels {
     public class MoviewListPageModel : INotifyPropertyChanged {
@@ -29,16 +27,6 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         // Binding Properties
 
-        public ICommand? FilterSelectionChangedCommand { get; set; }
-        public ICommand? WatchTrailerFromListCommand { get; set; }
-        public ICommand? WatchListPgButtonCommand { get; set; }
-        public ICommand? SelectionChangedCommand { get; set; }
-        public ICommand? SettingsPgButtonCommand { get; set; }
-        public ICommand? HistoryPgButtonCommand { get; set; }
-        public ICommand? ForYouPgButtonCommand { get; set; }
-        public ICommand? ProfilePgButtonCommand { get; set; }
-        public ICommand? AddToWatchListCommand { get; set; }
-        public ICommand? SearchCommand { get; set; }
         public MovieCollection Movie {
             get => _movie;
             set {
@@ -46,7 +34,6 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                 OnPropertyChanged();
             }
         }
-
         public string SelectedFilter {
             get => _selectedfilter;
             set {
@@ -54,9 +41,17 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                 OnPropertyChanged();
             }
         }
-
-
+        public ICommand? SearchCommand { get; set; }
+        public ICommand? AddToWatchListCommand { get; set; }
+        public ICommand? ForYouPgButtonCommand { get; set; }
+        public ICommand? HistoryPgButtonCommand { get; set; }
+        public ICommand? ProfilePgButtonCommand { get; set; }
+        public ICommand? SettingsPgButtonCommand { get; set; }
+        public ICommand? SelectionChangedCommand { get; set; }
+        public ICommand? WatchListPgButtonCommand { get; set; }
         public ObservableCollection<Movie> Movies { get; set; }
+        public ICommand? WatchTrailerFromListCommand { get; set; }
+        public ICommand? FilterSelectionChangedCommand { get; set; }
 
         // Constructor
 
@@ -68,7 +63,6 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
             this.Movies = Database.Movies;
 
             if (this.Movies.Count == 0) GetPopularMoviesFromDatabase("popular");
-
         }
 
         // Functions
@@ -104,6 +98,14 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
             string text = (param as string)!;
             TaskToJson(text);
+        }
+
+        private void FilterSelectionChanged(object? param) {
+
+            Movies.Clear();
+            string selectedfilter = (param as ComboBoxItem)!.Content.ToString()!.ToLower();
+            selectedfilter = selectedfilter.Replace(" ", "_");
+            GetPopularMoviesFromDatabase(selectedfilter);
         }
 
         private void SetCommands() {
@@ -160,11 +162,18 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
 
         }
 
-        private void AddToWatchList(object? sender) {
- 
+        private async void AddToWatchList(object? sender) {
+
             Movie Movie = (sender as Movie)!;
+
+            var movie = await GetAddedMovie(Movie);
+            WatchLists.Add(movie);
+        }
+
+        private async Task<ReelJet.Database.Entities.Movie> GetAddedMovie(Movie Movie) {
+
             bool isContain = false;
- 
+
             ReelJet.Database.Entities.Movie MovieEntity = new() {
                 Actors = Movie.Actors,
                 Awards = Movie.Awards,
@@ -194,43 +203,33 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                 Title = Movie.Title,
             };
  
-            if (CurrentUser.WatchList != null)
-                foreach (var movie in CurrentUser.WatchList) {
-                    if (movie.Movie.Title == MovieEntity.Title && movie.Movie.imdbID == MovieEntity.imdbID)
+            if (WatchLists != null)
+                foreach (var movie in WatchLists) {
+                    if (movie.Title == MovieEntity.Title && movie.imdbID == MovieEntity.imdbID)
                         isContain = true;
                 }
  
             if (!isContain) {
  
-                DbContext.Movies.Add(MovieEntity);
-                DbContext.SaveChanges();
+                await DbContext.Movies.AddAsync(MovieEntity);
+                await DbContext.SaveChangesAsync();
  
                 ReelJet.Database.Entities.Concretes.UserWatchList WatchList = new() {
                     UserId = CurrentUser.Id,
-                    MovieId = MovieEntity.Id,
-                    User = CurrentUser,
-                    Movie = MovieEntity,
+                    MovieId = MovieEntity.Id
                 };
  
                 foreach (var rating in Movie.Ratings)
-                    DbContext.Ratings.Add(new()
-                    {
+                    await DbContext.Ratings.AddAsync(new() {
                         Source = rating.Source,
                         Value = rating.Value,
                         MovieId = MovieEntity.Id
                     });
  
-                DbContext.WatchLists.Add(WatchList);
-                DbContext.SaveChanges();
+                await DbContext.WatchLists.AddAsync(WatchList);
+                await DbContext.SaveChangesAsync();
             }
-        }
-
-        private void FilterSelectionChanged(object? param) {
-
-            Movies.Clear();
-            string selectedfilter = (param as ComboBoxItem).Content.ToString().ToLower();
-            selectedfilter = selectedfilter.Replace(" ", "_");
-            GetPopularMoviesFromDatabase(selectedfilter);
+            return MovieEntity;
         }
 
         // INotifyPropertyChanged

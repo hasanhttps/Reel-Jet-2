@@ -21,7 +21,6 @@ using Reel_Jet.Views.MoviePages.VideoPlayerPages;
 using ReelJet.Application.Models.DatabaseNamespace;
 using static ReelJet.Application.Models.DatabaseNamespace.Database;
 
-
 #nullable disable
 
 namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
@@ -40,6 +39,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
         private string _movietype;
         private string _videoPgUrl;
         private BaseMovie BaseMovie;
+        private bool isAdblocker = false;
         private PersonalMovie PersonalMovie;
         private Reel_Jet.Models.MovieNamespace.Option selectedOption;
 
@@ -161,13 +161,23 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
             MainFrame.Content = new ForYouPage(MainFrame);
         }
 
-
         private void Player_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e) {
             Player.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
         }
 
         private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs e) {
             e.Handled = true;
+        }
+
+        private void FullScreenPage(object? sender) {
+
+            VideoPlayerPageModel videoPlayerPageModel = ((MainFrame.Content as VideoPlayerPage).DataContext as VideoPlayerPageModel);
+ 
+            Frame videoPlayerFrame = videoPlayerPageModel.VideoPlayerFrame;
+            videoPlayerPageModel.PrevFrame = videoPlayerFrame.Content;
+            videoPlayerPageModel.fullScreenPage = PlayerFrame.Content as FullScreenPage;
+ 
+            videoPlayerFrame.Navigate(PlayerFrame.Content);
         }
 
         private void LikeButton(object? sender) { 
@@ -181,6 +191,34 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
                 DbContext.SaveChanges();
             }
             LikeCount++;
+        }
+
+        private void SetWebView2() {
+
+            Uri uri = new Uri(VideoUrl!);
+            Player.Source = uri;
+
+            if (!isAdblocker) {
+
+                isAdblocker = true;
+                Player.EnsureCoreWebView2Async();
+                Player.CoreWebView2InitializationCompleted += Player_CoreWebView2InitializationCompleted;
+            }
+        }
+
+        private void SetCommands() {
+
+            LikeBtCommand = new RelayCommand(LikeButton);
+            ForYouPageCommand = new RelayCommand(ForYouPage);
+            SendCommentCommand = new RelayCommand(SendComment);
+            MovieListPageCommand = new RelayCommand(MovieListPage);
+            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
+            HistoryPgButtonCommand = new RelayCommand(HistoryPage);
+            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
+            FullScreenButtonCommand = new RelayCommand(FullScreenPage);
+            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
+            SelectionChangedCommand = new RelayCommand(SelectionChanged);
+            MultipleServerButtonCommand = new RelayCommand(ChangeServer);
         }
 
         private void ChangeServer(object? param) {
@@ -207,40 +245,6 @@ namespace Reel_Jet.ViewModels.MoviePageModels.VideoPlayerPageModels {
             }
 
             SetWebView2();
-
-        }
-
-        private void SetWebView2() {
-
-            Uri uri = new Uri(VideoUrl!);
-            Player.Source = uri;
-            Player.EnsureCoreWebView2Async();
-            Player.CoreWebView2InitializationCompleted += Player_CoreWebView2InitializationCompleted;
-        }
-
-        private void FullScreenPage(object? sender) {
-            VideoPlayerPageModel videoPlayerPageModel = ((MainFrame.Content as VideoPlayerPage).DataContext as VideoPlayerPageModel);
- 
-            Frame videoPlayerFrame = videoPlayerPageModel.VideoPlayerFrame;
-            videoPlayerPageModel.PrevFrame = videoPlayerFrame.Content;
-            videoPlayerPageModel.fullScreenPage = PlayerFrame.Content as FullScreenPage;
- 
-            videoPlayerFrame.Navigate(PlayerFrame.Content);
-        }
- 
-        private void SetCommands() {
-
-            LikeBtCommand = new RelayCommand(LikeButton);
-            ForYouPageCommand = new RelayCommand(ForYouPage);
-            SendCommentCommand = new RelayCommand(SendComment);
-            MovieListPageCommand = new RelayCommand(MovieListPage);
-            ProfilePgButtonCommand = new RelayCommand(ProfilePage);
-            HistoryPgButtonCommand = new RelayCommand(HistoryPage);
-            SettingsPgButtonCommand = new RelayCommand(SettingsPage);
-            FullScreenButtonCommand = new RelayCommand(FullScreenPage);
-            WatchListPgButtonCommand = new RelayCommand(WatchListPage);
-            SelectionChangedCommand = new RelayCommand(SelectionChanged);
-            MultipleServerButtonCommand = new RelayCommand(ChangeServer);
         }
 
         private void SelectionChanged(object? sender) {

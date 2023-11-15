@@ -31,20 +31,35 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
 
             MainFrame = frame;
 
-            Thread loadDatabase = new Thread(() => {
+            Thread loadCurrentUser = new Thread(() => {
+
                 DbContext = new ReelJetDbContext();
                 var users = DbContext.Users.ToList();
                 Users = users;
             });
-            loadDatabase.Start();
+            loadCurrentUser.Start();
+
+            Thread loadDatabaseResources = new Thread(() => {
+
+                loadCurrentUser.Join();
+
+                // Loading resources
+
+                foreach (var watchlist in CurrentUser.WatchList)
+                    WatchLists.Add(watchlist.Movie);
+
+                foreach (var historylist in CurrentUser.HistoryList)
+                    HistoryLists.Add(historylist.Movie);
+            });
 
             Thread fileMemoryThread = new Thread(() => {
                 try {
                     UserId = ReadData<int?>("logs");
 
-                    loadDatabase.Join();
-                    CurrentUser = DbContext.Users.Where(u => u.Id == UserId).First();
+                    loadCurrentUser.Join();
+                    CurrentUser = Users.Where(u => u.Id == UserId).First();
                     userAuthentication.Avatar = UserAuthentication.LoadImage(CurrentUser.Avatar!);
+                    loadDatabaseResources.Start();
                 }
                 catch(Exception ex) {
                     UserId = null;
@@ -86,8 +101,6 @@ namespace Reel_Jet.ViewModels.RegistrationPageModels {
                 MainFrame.Content = new MovieListPage(MainFrame);
             else MainFrame.Content = new LoginPage(MainFrame);
         }
-
-
 
         public async void LoadFilteredMoviesToDatabase(string filterchoice) {
 
