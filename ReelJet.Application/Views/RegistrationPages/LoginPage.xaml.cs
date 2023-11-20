@@ -7,12 +7,20 @@ using Reel_Jet.Views.RegistrationPages.SignUpPages;
 
 namespace Reel_Jet.Views.RegistrationPages {
     public partial class LoginPage : Page {
+
+        // Private Fields
+
         private Frame MainFrame;
+
+        // Constructor
+
         public LoginPage(Frame frame) {
             InitializeComponent();
             MainFrame = frame;
             DataContext = new LoginPageModel(frame);
         }
+
+        // Functions
 
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e) {
             MainFrame.Content = new MainSignUpPage(MainFrame);

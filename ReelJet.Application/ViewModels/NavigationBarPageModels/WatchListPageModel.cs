@@ -29,8 +29,8 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
         public ICommand? MovieListPgButtonCommand { get; set; }
         public ICommand RemoveFromWatchListCommand { get; set; }
         public ICommand WatchMovieFromWatchListCommand { get; set; }
+        public ObservableCollection<Movie> MyWatchList { get; set; }
         public Reel_Jet.Models.MovieNamespace.ShortMovieInfo? MovieInfo { get; set; }
-        public ObservableCollection<Movie> MyWatchList { get; set; } = new ObservableCollection<Movie>();
 
         // Constructor
 
@@ -66,11 +66,7 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
 
         private void WriteWatchlist() {
 
-            if (CurrentUser.WatchList != null) {
-                foreach (var movie in CurrentUser.WatchList) {
-                    MyWatchList.Add(movie.Movie);
-                }
-            }
+            MyWatchList = WatchLists;
         }
 
         private void SetCommands() {
@@ -113,10 +109,10 @@ namespace Reel_Jet.ViewModels.NavigationBarPageModels {
             MyWatchList.Remove(a);
             UserWatchList? deleteditem = null;
 
-            foreach (var item in DbContext.WatchLists)
-                if (item.UserId == CurrentUser.Id && item.MovieId == a.Id) deleteditem = item;
+            foreach (var item in CurrentUser.WatchList.ToList())
+                if (item.MovieId == a.Id) deleteditem = item;
 
-            DbContext.WatchLists.Remove(deleteditem);
+            DbContext.WatchLists.Remove(deleteditem!);
             DbContext.SaveChanges();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json;
 using Reel_Jet.Commands;
 using System.Windows.Input;
@@ -108,6 +109,18 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
             GetPopularMoviesFromDatabase(selectedfilter);
         }
 
+        private async Task AddAsyncWatchListDatabase (ReelJet.Database.Entities.Movie MovieEntity) {
+
+            ReelJet.Database.Entities.Concretes.UserWatchList WatchList = new() {
+                UserId = CurrentUser.Id,
+                MovieId = MovieEntity.Id
+            };
+ 
+            await DbContext.WatchLists.AddAsync(WatchList);
+            await DbContext.SaveChangesAsync();
+            WatchLists.Add(MovieEntity);
+        }
+
         private void SetCommands() {
 
             SearchCommand = new RelayCommand(Search);
@@ -165,9 +178,7 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
         private async void AddToWatchList(object? sender) {
 
             Movie Movie = (sender as Movie)!;
-
             var movie = await GetAddedMovie(Movie);
-            WatchLists.Add(movie);
         }
 
         private async Task<ReelJet.Database.Entities.Movie> GetAddedMovie(Movie Movie) {
@@ -205,19 +216,26 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
  
             if (WatchLists != null)
                 foreach (var movie in WatchLists) {
-                    if (movie.Title == MovieEntity.Title && movie.imdbID == MovieEntity.imdbID)
+                    if (movie.imdbID == MovieEntity.imdbID) {
                         isContain = true;
+                        break;
+                    }
                 }
- 
+            
+            if(!isContain) {
+                foreach (var movie in DbContext.Movies.ToList()) {
+                    if (MovieEntity.imdbID == movie.imdbID) {
+                        await AddAsyncWatchListDatabase(movie);
+                        isContain = true; 
+                        break;
+                    }
+                }
+            }
+
             if (!isContain) {
  
                 await DbContext.Movies.AddAsync(MovieEntity);
                 await DbContext.SaveChangesAsync();
- 
-                ReelJet.Database.Entities.Concretes.UserWatchList WatchList = new() {
-                    UserId = CurrentUser.Id,
-                    MovieId = MovieEntity.Id
-                };
  
                 foreach (var rating in Movie.Ratings)
                     await DbContext.Ratings.AddAsync(new() {
@@ -225,9 +243,8 @@ namespace Reel_Jet.ViewModels.MoviePageModels {
                         Value = rating.Value,
                         MovieId = MovieEntity.Id
                     });
- 
-                await DbContext.WatchLists.AddAsync(WatchList);
-                await DbContext.SaveChangesAsync();
+
+                await AddAsyncWatchListDatabase(MovieEntity);
             }
             return MovieEntity;
         }
