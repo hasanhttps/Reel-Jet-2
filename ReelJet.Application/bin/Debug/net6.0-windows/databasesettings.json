@@ -1,5 +1,5 @@
 {
   "ConnectionStrings": {
-    "Sql": "Server=100.78.182.195,1433\\desktop-kkd6gs8\\mssqlserver02;User Id=SuperAdmin;Password=SuperAdmin;Database=ReelJet;Trust Server Certificate=True;"
+    "Sql": "Server=tcp:reeljet.ddns.net,1433;User Id=SuperAdmin;Password=SuperAdmin;Database=ReelJet;Trust Server Certificate=True;"
   }
 }
